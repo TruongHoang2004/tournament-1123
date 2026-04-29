@@ -1,0 +1,62 @@
+import { TournamentState } from "./types";
+
+export const initialData: TournamentState = {
+  teams: [
+    { id: 1, name: "Smash Titans", group: "A", points: 8 },
+    { id: 2, name: "Net Ninjas", group: "A", points: 12 },
+    { id: 3, name: "Shuttle Masters", group: "A", points: 4 },
+    { id: 4, name: "Court Kings", group: "B", points: 10 },
+    { id: 5, name: "Dragon Slayers", group: "B", points: 6 },
+    { id: 6, name: "Racket Rebels", group: "B", points: 2 },
+  ],
+  matches: [
+    {
+      id: "1",
+      category: "Advanced Men's Doubles",
+      round: "Group Stage",
+      team1Id: 1,
+      team2Id: 2,
+      score1: 21,
+      score2: 19,
+      status: "FINISHED",
+      pointsEarned1: 2,
+      pointsEarned2: 0,
+    },
+    {
+      id: "2",
+      category: "Mixed-Level Men's Doubles",
+      round: "Group Stage",
+      team1Id: 4,
+      team2Id: 5,
+      score1: 15,
+      score2: 21,
+      status: "LIVE",
+      pointsEarned1: 0,
+      pointsEarned2: 0,
+    },
+    {
+      id: "3",
+      category: "Women's Doubles",
+      round: "Group Stage",
+      team1Id: 1,
+      team2Id: 3,
+      score1: 21,
+      score2: 12,
+      status: "FINISHED",
+      pointsEarned1: 2,
+      pointsEarned2: 0,
+    },
+    {
+      id: "4",
+      category: "Advanced Mixed Doubles",
+      round: "Group Stage",
+      team1Id: 2,
+      team2Id: 1,
+      score1: 18,
+      score2: 21,
+      status: "FINISHED",
+      pointsEarned1: 0,
+      pointsEarned2: 2,
+    },
+  ]
+};
