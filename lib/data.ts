@@ -2,12 +2,12 @@ import { TournamentState } from "./types";
 
 export const initialData: TournamentState = {
   teams: [
-    { id: 1, name: "Smash Titans", group: "A", points: 8 },
-    { id: 2, name: "Net Ninjas", group: "A", points: 12 },
-    { id: 3, name: "Shuttle Masters", group: "A", points: 4 },
-    { id: 4, name: "Court Kings", group: "B", points: 10 },
-    { id: 5, name: "Dragon Slayers", group: "B", points: 6 },
-    { id: 6, name: "Racket Rebels", group: "B", points: 2 },
+    { id: 1, name: "Smash Titans", group: "A", points: 8, members: ["Hoàng", "Minh", "Tuấn", "Dũng"] },
+    { id: 2, name: "Net Ninjas", group: "A", points: 12, members: ["Linh", "Trang", "Hùng", "Sơn"] },
+    { id: 3, name: "Shuttle Masters", group: "A", points: 4, members: ["An", "Bình", "Cường", "Đạt"] },
+    { id: 4, name: "Court Kings", group: "B", points: 10, members: ["Phúc", "Lộc", "Thọ", "Toàn"] },
+    { id: 5, name: "Dragon Slayers", group: "B", points: 6, members: ["Kiên", "Tâm", "Hải", "Việt"] },
+    { id: 6, name: "Racket Rebels", group: "B", points: 2, members: ["Thắng", "Lợi", "Quang", "Vinh"] },
   ],
   matches: [
     {

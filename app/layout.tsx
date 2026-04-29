@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   description: "Live score tracking and leaderboard for the 1123 Badminton Tournament.",
 };
 
+import Navbar from "@/components/bar/Navbar";
+import Footer from "@/components/bar/Footer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,7 +33,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased`}>
       <body>
-        {children}
+        <Navbar />
+        <main className="pt-16 min-h-screen">
+          {children}
+          <Footer />
+        </main>
       </body>
     </html>
   );

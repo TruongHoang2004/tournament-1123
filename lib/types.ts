@@ -13,6 +13,7 @@ export interface Team {
   name: string;
   group: "A" | "B";
   points: number; // Total accumulated points
+  members: string[];
 }
 
 export interface Match {
