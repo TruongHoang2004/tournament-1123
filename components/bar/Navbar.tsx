@@ -45,18 +45,29 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-6">
           <Link
             href="/"
-            className={`group relative py-2 text-xs font-black uppercase tracking-widest transition-all ${pathname === '/' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Dashboard
+            Club Home
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </Link>
+          
+          <div className="w-[1px] h-4 bg-foreground/10 mx-2"></div>
+
+          <Link
+            href="/tournament"
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/tournament' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
+              }`}
+          >
+            Tournament
+            <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/tournament' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
             href="/brackets"
-            className={`group relative py-2 text-xs font-black uppercase tracking-widest transition-all ${pathname === '/brackets' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/brackets' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
             Brackets
@@ -64,15 +75,16 @@ export default function Navbar() {
           </Link>
           <Link
             href="/teams"
-            className={`group relative py-2 text-xs font-black uppercase tracking-widest transition-all ${pathname === '/teams' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/teams' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
             Teams
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/teams' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
+          
           <Link
             href="/admin"
-            className={`group relative py-2 text-xs font-black uppercase tracking-widest transition-all ${pathname === '/admin' ? 'text-accent' : 'text-foreground/60 hover:text-accent'
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/admin' ? 'text-accent' : 'text-foreground/60 hover:text-accent'
               }`}
           >
             Admin

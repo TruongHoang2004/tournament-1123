@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 
 import Navbar from "@/components/bar/Navbar";
 import Footer from "@/components/bar/Footer";
+import QueryProvider from "@/components/providers/query-provider";
 
 export default function RootLayout({
   children,
@@ -33,11 +34,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased`}>
       <body>
-        <Navbar />
-        <main className="pt-16 min-h-screen">
-          {children}
-          <Footer />
-        </main>
+        <QueryProvider>
+          <Navbar />
+          <main className="pt-16 min-h-screen">
+            {children}
+            <Footer />
+          </main>
+        </QueryProvider>
       </body>
     </html>
   );
