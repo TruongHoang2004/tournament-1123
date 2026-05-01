@@ -36,7 +36,7 @@ export default function RootLayout({
       <body>
         <QueryProvider>
           <Navbar />
-          <main className="pt-16 min-h-screen">
+          <main className="pt-16 min-h-screen flex-1 flex flex-col justify-center">
             {children}
             <Footer />
           </main>

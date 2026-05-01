@@ -49,32 +49,14 @@ enum SlotSourceType {
 // CORE
 //////////////////////////////////////////////////////
 
-model Tournament {
-  id         String   @id @default(uuid())
-  name       String
-  date       DateTime
-  createdAt  DateTime @default(now())
-
-  teams      Team[]
-  rounds     Round[]
-  matches    Match[]
-
-  @@index([date])
-}
-
 model Team {
   id            String   @id @default(uuid())
   name          String
-
-  tournamentId  String
-  tournament    Tournament @relation(fields: [tournamentId], references: [id])
 
   players       Player[]
   doubles       Double[]
   wonMatches    Match[]
   matchResults  MatchResultLog[]
-
-  @@index([tournamentId])
 }
 
 model Player {
@@ -116,28 +98,22 @@ model Double {
 }
 
 model Category {
-  id      String @id @default(uuid())
+  id      String       @id @default(uuid())
   code    CategoryCode @unique
   name    String
 
-  doubles Double[]
+  doubles         Double[]
   timelineMatches TimelineMatch[]
 }
 
 model Round {
-  id            String @id @default(uuid())
-  name          RoundType
+  id        String    @id @default(uuid())
+  name      RoundType @unique
 
-  tournamentId  String
-  tournament    Tournament @relation(fields: [tournamentId], references: [id])
-
-  pointWin      Int
-  pointLoss     Int
+  pointWin  Int
+  pointLoss Int
 
   timelineMatches TimelineMatch[]
-
-  @@unique([tournamentId, name])
-  @@index([tournamentId])
 }
 
 //////////////////////////////////////////////////////
@@ -145,20 +121,19 @@ model Round {
 //////////////////////////////////////////////////////
 
 model TimelineMatch {
-  id          String @id @default(uuid())
+  id         String @id @default(uuid())
 
-  roundId     String
-  round       Round @relation(fields: [roundId], references: [id])
+  roundId    String
+  round      Round @relation(fields: [roundId], references: [id])
 
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 
-  order       Int
-  roundOrder  Int
+  order      Int
+  roundOrder Int
 
   slots       MatchSlot[]
   matches     Match[]
-
   sourceSlots MatchSlot[] @relation("SourceMatch")
 
   @@unique([roundId, categoryId, order])
@@ -167,20 +142,20 @@ model TimelineMatch {
 }
 
 model MatchSlot {
-  id               String @id @default(uuid())
+  id              String @id @default(uuid())
 
-  timelineMatchId  String
-  timelineMatch    TimelineMatch @relation(fields: [timelineMatchId], references: [id])
+  timelineMatchId String
+  timelineMatch   TimelineMatch @relation(fields: [timelineMatchId], references: [id])
 
-  side             SlotSide
-  sourceType       SlotSourceType
+  side            SlotSide
+  sourceType      SlotSourceType
 
-  staticKey        String?
+  staticKey       String?
 
-  sourceMatchId    String?
-  sourceMatch      TimelineMatch? @relation("SourceMatch", fields: [sourceMatchId], references: [id])
+  sourceMatchId   String?
+  sourceMatch     TimelineMatch? @relation("SourceMatch", fields: [sourceMatchId], references: [id])
 
-  sourceResult     MatchResult?
+  sourceResult    MatchResult?
 
   @@index([timelineMatchId])
   @@index([sourceMatchId])
@@ -191,58 +166,60 @@ model MatchSlot {
 //////////////////////////////////////////////////////
 
 model Match {
-  id               String @id @default(uuid())
+  id              String @id @default(uuid())
 
-  tournamentId     String
-  tournament       Tournament @relation(fields: [tournamentId], references: [id])
+  timelineMatchId String
+  timelineMatch   TimelineMatch @relation(fields: [timelineMatchId], references: [id])
 
-  timelineMatchId  String
-  timelineMatch    TimelineMatch @relation(fields: [timelineMatchId], references: [id])
+  doubleAId       String
+  doubleBId       String
 
-  doubleAId        String
-  doubleBId        String
+  doubleA         Double @relation("MatchA", fields: [doubleAId], references: [id])
+  doubleB         Double @relation("MatchB", fields: [doubleBId], references: [id])
 
-  doubleA          Double @relation("MatchA", fields: [doubleAId], references: [id])
-  doubleB          Double @relation("MatchB", fields: [doubleBId], references: [id])
+  winnerTeamId    String?
+  winnerTeam      Team? @relation(fields: [winnerTeamId], references: [id])
 
-  winnerTeamId     String?
-  winnerTeam       Team? @relation(fields: [winnerTeamId], references: [id])
+  playedAt        DateTime?
 
-  playedAt         DateTime?
+  setScores       SetScore[]
+  resultLogs      MatchResultLog[]
 
-  setScores        SetScore[]
-  resultLogs       MatchResultLog[]
-
-  @@index([tournamentId])
   @@index([timelineMatchId])
 }
 
 model SetScore {
-  id         String @id @default(uuid())
+  id        String @id @default(uuid())
 
-  matchId    String
-  match      Match @relation(fields: [matchId], references: [id])
+  matchId   String
+  match     Match @relation(fields: [matchId], references: [id])
 
-  setNumber  Int
-  scoreA     Int
-  scoreB     Int
+  setNumber Int
+  scoreA    Int
+  scoreB    Int
 
   @@unique([matchId, setNumber])
   @@index([matchId])
 }
 
 model MatchResultLog {
-  id       String @id @default(uuid())
+  id      String @id @default(uuid())
 
-  matchId  String
-  match    Match @relation(fields: [matchId], references: [id])
+  matchId String
+  match   Match @relation(fields: [matchId], references: [id])
 
-  teamId   String
-  team     Team @relation(fields: [teamId], references: [id])
+  teamId  String
+  team    Team @relation(fields: [teamId], references: [id])
 
-  result   MatchResult
-  points   Int
+  result  MatchResult
+  points  Int
 
   @@index([matchId])
   @@index([teamId])
+}
+
+model TournamentConfig {
+  id  string @id @default(uuid())
+  key string 
+  value string
 }
