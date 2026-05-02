@@ -1,4 +1,4 @@
-import { prisma } from "./prisma";
+import prisma from "./prisma";
 import { CategoryCode, RoundType, MatchResult } from "@/prisma/client";
 
 // ─── TOURNAMENT ───────────────────────────────────────────────────────
