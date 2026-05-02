@@ -9,10 +9,12 @@ import Link from "next/link";
 import { AdminLogin } from "@/components/admin/AdminLogin";
 import { DoubleCreateForm } from "@/components/admin/DoubleCreateForm";
 import { DoubleList } from "@/components/admin/DoubleList";
+import { GroupAssignment } from "@/components/admin/GroupAssignment";
 
 export default function AdminDoublesPage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
 
   if (!isAuthorized) {
     return <AdminLogin onSuccess={() => setIsAuthorized(true)} />;
@@ -47,11 +49,14 @@ export default function AdminDoublesPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Create Form */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 space-y-8">
             <DoubleCreateForm
               selectedTeamId={selectedTeamId}
               onTeamChange={setSelectedTeamId}
+              selectedCategoryId={selectedCategoryId}
+              onCategoryChange={setSelectedCategoryId}
             />
+            <GroupAssignment selectedCategoryId={selectedCategoryId} />
           </div>
 
           {/* List of Doubles */}

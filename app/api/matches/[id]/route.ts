@@ -121,6 +121,11 @@ export async function PATCH(
         where: { id },
         include: { resultLogs: true },
       });
+
+      // Auto-propagate the winner to the next slot in the bracket if applicable
+      const { checkAndResolveNextMatch } = await import("@/services/match-resolver");
+      await checkAndResolveNextMatch(id);
+
       return NextResponse.json(finalMatch);
     }
 

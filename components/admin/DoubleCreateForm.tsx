@@ -18,11 +18,12 @@ import { toast } from "sonner";
 interface DoubleCreateFormProps {
   selectedTeamId: string;
   onTeamChange: (id: string) => void;
+  selectedCategoryId: string;
+  onCategoryChange: (id: string) => void;
 }
 
-export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateFormProps) {
+export function DoubleCreateForm({ selectedTeamId, onTeamChange, selectedCategoryId, onCategoryChange }: DoubleCreateFormProps) {
   // Form State
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [player1Id, setPlayer1Id] = useState("");
   const [player2Id, setPlayer2Id] = useState("");
   const [point, setPoint] = useState(0);
@@ -103,7 +104,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
           <div className="relative">
             <select
               value={selectedCategoryId}
-              onChange={(e) => setSelectedCategoryId(e.target.value)}
+              onChange={(e) => onCategoryChange(e.target.value)}
               className="w-full bg-white border border-zinc-200 rounded-xl p-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-zinc-900 appearance-none cursor-pointer"
             >
               <option value="">Chọn hạng mục...</option>
