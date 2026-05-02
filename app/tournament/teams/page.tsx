@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Users, User, ArrowRight, Mail, Phone, ChevronRight } from "lucide-react";
-import { useActiveTournament, useTeams } from "@/services";
+import {  useTeams } from "@/services";
 
 interface Team {
   id: string;
@@ -17,10 +14,8 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import TeamCard from "@/components/tournament/TeamCard";
 
 export default function TeamsPage() {
-  const { data: tData } = useActiveTournament();
-  const tournamentId = tData?.tournament?.id;
 
-  const { data: teams = [], isLoading } = useTeams(tournamentId);
+  const { data: teams = [], isLoading } = useTeams();
 
   if (isLoading) return <LoadingSpinner />;
 

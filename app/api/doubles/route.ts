@@ -9,8 +9,6 @@ export async function GET(request: NextRequest) {
                 player1: true,
                 player2: true,
                 category: true,
-                teamA: { include: { players: true } },
-                teamB: { include: { players: true } },
             },
         });
 

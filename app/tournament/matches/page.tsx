@@ -3,13 +3,11 @@
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import SectionHeader from "@/components/shared/SectionHeader";
 import MatchCard from "@/components/tournament/MatchCard";
-import { useActiveTournament, useMatches, useUpdateScore, useFinalizeMatch } from "@/services";
+import {useMatches, useUpdateScore, useFinalizeMatch } from "@/services";
 
 export default function MatchesPage() {
-  const { data: tData, isLoading: isLoadingTournament } = useActiveTournament();
-  const tournamentId = tData?.tournament?.id;
 
-  const { data: matches = [], isLoading: isLoadingMatches } = useMatches(tournamentId);
+  const { data: matches = [], isLoading: isLoadingMatches } = useMatches();
 
   const updateScoreMutation = useUpdateScore();
   const finalizeMutation = useFinalizeMatch();
@@ -23,7 +21,7 @@ export default function MatchesPage() {
     finalizeMutation.mutate(matchId);
   };
 
-  const isLoading = isLoadingTournament || isLoadingMatches;
+  const isLoading = isLoadingMatches;
   const updating = updateScoreMutation.isPending || finalizeMutation.isPending;
 
   if (isLoading) return <LoadingSpinner />;

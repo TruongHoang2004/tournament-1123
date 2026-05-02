@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { CategoryCode } from "@prisma/client";
 import { ChevronRight, Trophy, Users, Sword } from "lucide-react";
-import { useCategories, useActiveTournament, useTimeline } from "@/services";
+import { useCategories, useTimeline } from "@/services";
 
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import SectionHeader from "@/components/shared/SectionHeader";
@@ -23,10 +23,8 @@ export default function BracketsPage() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryCode | null>(null);
 
   const { data: categories = [] } = useCategories();
-  const { data: tData } = useActiveTournament();
 
-  const tournamentId = tData?.tournament?.id;
-  const { data: timeline = [], isLoading: loading } = useTimeline(tournamentId, selectedCategory);
+  const { data: timeline = [], isLoading: loading } = useTimeline(selectedCategory);
 
   useEffect(() => {
     if (categories.length > 0 && !selectedCategory) {

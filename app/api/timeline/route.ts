@@ -2,16 +2,11 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { CategoryCode } from "@prisma/client";
 
-// GET /api/timeline?tournamentId=xxx&category=xxx — Lấy sơ đồ thi đấu
+// GET /api/timeline?category=xxx — Lấy sơ đồ thi đấu
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const tournamentId = searchParams.get("tournamentId");
     const categoryCode = searchParams.get("category") as CategoryCode | null;
-
-    if (!tournamentId) {
-      return NextResponse.json({ error: "tournamentId is required" }, { status: 400 });
-    }
 
     const where: Record<string, any> = {};
     if (categoryCode) {
@@ -19,7 +14,7 @@ export async function GET(request: Request) {
       if (category) where.categoryId = category.id;
     }
 
-    const rounds = await prisma.round.findMany({ where: { tournamentId } });
+    const rounds = await prisma.round.findMany();
     where.roundId = { in: rounds.map((r) => r.id) };
 
     const timeline = await prisma.timelineMatch.findMany({

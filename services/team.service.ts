@@ -7,8 +7,8 @@ export const teamService = {
     return res.data;
   },
 
-  getAllByTournament: async (tournamentId: string) => {
-    const res = await api.get("/teams", { params: { tournamentId } });
+  getAllByTournament: async () => {
+    const res = await api.get("/teams");
     return res.data;
   },
 
@@ -25,15 +25,15 @@ export const teamService = {
 
 export const teamKeys = {
   all: ["teams"] as const,
-  list: (tournamentId: string) => [...teamKeys.all, "list", { tournamentId }] as const,
+  list: () => [...teamKeys.all, "list"] as const,
   detail: (id: string) => [...teamKeys.all, "detail", id] as const,
 };
 
-export function useTeams(tournamentId: string | undefined) {
+export function useTeams() {
   return useQuery({
-    queryKey: teamKeys.list(tournamentId!),
-    queryFn: () => teamService.getAllByTournament(tournamentId!),
-    enabled: !!tournamentId,
+    queryKey: teamKeys.list(),
+    queryFn: () => teamService.getAllByTournament(),
+    enabled: true,
   });
 }
 

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 export const timelineService = {
   getTimeline: async (tournamentId: string, categoryCode?: string) => {
     const res = await api.get("/timeline", {
-      params: { tournamentId, category: categoryCode },
+      params: {  category: categoryCode },
     });
     return res.data;
   },
@@ -16,10 +16,10 @@ export const timelineKeys = {
     [...timelineKeys.all, tournamentId, { categoryCode }] as const,
 };
 
-export function useTimeline(tournamentId: string | undefined, categoryCode: string | null) {
+export function useTimeline( categoryCode: string | null) {
   return useQuery({
-    queryKey: timelineKeys.detail(tournamentId!, categoryCode!),
-    queryFn: () => timelineService.getTimeline(tournamentId!, categoryCode!),
-    enabled: !!tournamentId && !!categoryCode,
+    queryKey: timelineKeys.detail( categoryCode!),
+    queryFn: () => timelineService.getTimeline( categoryCode!),
+    enabled:  !!categoryCode,
   });
 }

@@ -1,10 +1,9 @@
 import api from "@/lib/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { tournamentKeys } from "./tournament.service";
 
 export const matchService = {
-  getAllByTournament: async (tournamentId: string) => {
-    const res = await api.get("/matches", { params: { tournamentId } });
+  getAllByTournament: async () => {
+    const res = await api.get("/matches");
     return res.data;
   },
 
@@ -31,15 +30,15 @@ export const matchService = {
 
 export const matchKeys = {
   all: ["matches"] as const,
-  list: (tournamentId: string) => [...matchKeys.all, "list", { tournamentId }] as const,
+  list: () => [...matchKeys.all, "list"] as const,
   detail: (id: string) => [...matchKeys.all, "detail", id] as const,
 };
 
-export function useMatches(tournamentId: string | undefined) {
+export function useMatches() {
   return useQuery({
-    queryKey: matchKeys.list(tournamentId!),
-    queryFn: () => matchService.getAllByTournament(tournamentId!),
-    enabled: !!tournamentId,
+    queryKey: matchKeys.list(),
+    queryFn: () => matchService.getAllByTournament(),
+    enabled: true,
   });
 }
 
@@ -68,7 +67,6 @@ export function useFinalizeMatch() {
     mutationFn: (matchId: string) => matchService.finalize(matchId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: matchKeys.all });
-      queryClient.invalidateQueries({ queryKey: tournamentKeys.all });
     },
   });
 }
