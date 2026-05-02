@@ -26,6 +26,21 @@ export const matchService = {
     const res = await api.patch(`/matches/${matchId}`, { action: "finalize" });
     return res.data;
   },
+
+  startMatch: async (matchId: string) => {
+    const res = await api.patch(`/matches/${matchId}`, { action: "startMatch" });
+    return res.data;
+  },
+
+  resetMatch: async (matchId: string) => {
+    const res = await api.patch(`/matches/${matchId}`, { action: "resetMatch" });
+    return res.data;
+  },
+
+  reorder: async (timelineMatchId: string, direction: "up" | "down") => {
+    const res = await api.post("/timeline/reorder", { timelineMatchId, direction });
+    return res.data;
+  },
 };
 
 export const matchKeys = {
@@ -67,6 +82,38 @@ export function useFinalizeMatch() {
     mutationFn: (matchId: string) => matchService.finalize(matchId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: matchKeys.all });
+    },
+  });
+}
+
+export function useStartMatch() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (matchId: string) => matchService.startMatch(matchId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: matchKeys.all });
+    },
+  });
+}
+
+export function useResetMatch() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (matchId: string) => matchService.resetMatch(matchId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: matchKeys.all });
+    },
+  });
+}
+
+export function useReorderMatch() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, direction }: { id: string; direction: "up" | "down" }) => 
+      matchService.reorder(id, direction),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: matchKeys.all });
+      queryClient.invalidateQueries({ queryKey: ["timeline"] });
     },
   });
 }
