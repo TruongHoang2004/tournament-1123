@@ -79,7 +79,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange, selectedCategor
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Team Selection */}
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Đội tuyển</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Đội</label>
           <div className="relative">
             <select
               value={selectedTeamId}

@@ -51,7 +51,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Club Home
+            Trang chủ
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
 
@@ -62,7 +62,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/tournament' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Tournament
+            Giải đấu
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/tournament' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
@@ -70,7 +70,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/matches' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Matches
+            Trận đấu
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/matches' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
@@ -78,7 +78,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/standings' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Standings
+            Bảng xếp hạng
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/standings' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
@@ -86,7 +86,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/brackets' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Brackets
+            Sơ đồ thi đấu
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/brackets' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
@@ -94,7 +94,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/teams' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Teams
+            Team
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/teams' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
@@ -102,7 +102,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/doubles' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Doubles
+            Cặp đôi
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/doubles' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
@@ -110,7 +110,7 @@ export default function Navbar() {
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/players' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
           >
-            Players
+            VĐV
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/players' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
 

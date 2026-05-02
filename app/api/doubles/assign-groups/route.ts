@@ -47,14 +47,14 @@ export async function POST(request: NextRequest) {
 
             // 2. Generate matches and timeline for each category
             const categories = await tx.category.findMany();
-            
+
             for (const category of categories) {
                 // Clear EVERYTHING for this category to reset the timeline
                 const existingTMs = await tx.timelineMatch.findMany({
                     where: { categoryId: category.id }
                 });
                 const tmIds = existingTMs.map(tm => tm.id);
-                
+
                 if (tmIds.length > 0) {
                     await tx.matchResultLog.deleteMany({ where: { match: { timelineMatchId: { in: tmIds } } } });
                     await tx.setScore.deleteMany({ where: { match: { timelineMatchId: { in: tmIds } } } });
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
                 }
 
                 // --- GROUP STAGE ---
-                
+
                 // Get doubles for Group A
                 const doublesA = await tx.double.findMany({
                     where: { categoryId: category.id, group: "A" },
@@ -83,8 +83,8 @@ export async function POST(request: NextRequest) {
                                 roundOrder: 1,
                                 slots: {
                                     create: [
-                                        { side: "A", sourceType: SlotSourceType.STATIC, staticKey: `GA-${i+1}-A` },
-                                        { side: "B", sourceType: SlotSourceType.STATIC, staticKey: `GA-${i+1}-B` }
+                                        { side: "A", sourceType: SlotSourceType.STATIC, staticKey: `GA-${i + 1}-A` },
+                                        { side: "B", sourceType: SlotSourceType.STATIC, staticKey: `GA-${i + 1}-B` }
                                     ]
                                 }
                             }
@@ -111,8 +111,8 @@ export async function POST(request: NextRequest) {
                                 roundOrder: 1,
                                 slots: {
                                     create: [
-                                        { side: "A", sourceType: SlotSourceType.STATIC, staticKey: `GB-${i+1}-A` },
-                                        { side: "B", sourceType: SlotSourceType.STATIC, staticKey: `GB-${i+1}-B` }
+                                        { side: "A", sourceType: SlotSourceType.STATIC, staticKey: `GB-${i + 1}-A` },
+                                        { side: "B", sourceType: SlotSourceType.STATIC, staticKey: `GB-${i + 1}-B` }
                                     ]
                                 }
                             }
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
                 }
 
                 // --- KNOCKOUT STAGE (Timeline Placeholders) ---
-                
+
                 // Semi-final 1: 1st Group A vs 2nd Group B
                 const semi1 = await tx.timelineMatch.create({
                     data: {
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
                 });
             }
         }, {
-            timeout: 10000 // Increase timeout for many operations
+            timeout: 30000 // Increase timeout for many operations
         });
 
         return NextResponse.json({ success: true, message: "Bốc bảng, tạo trận đấu và sơ đồ thi đấu thành công" });

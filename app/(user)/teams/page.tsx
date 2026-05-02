@@ -29,8 +29,8 @@ export default function TeamsPage() {
             <div className="max-w-7xl mx-auto space-y-12">
                 <SectionHeader
                     title="Danh sách đội"
-                    subtitle="Các đội tuyển đang tham gia tranh tài tại giải đấu"
-                    badge={`${teams.length} Đội tuyển`}
+                    subtitle="Các đội tham gia tranh tài tại giải đấu"
+                    badge={`${teams.length} Đội`}
                 />
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

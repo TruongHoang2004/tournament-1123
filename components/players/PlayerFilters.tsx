@@ -73,7 +73,7 @@ export function PlayerFilters({
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1">Đội tuyển</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-foreground/40 ml-1">Đội</label>
             <select
               value={selectedTeam}
               onChange={(e) => onTeamChange(e.target.value)}

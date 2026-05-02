@@ -43,7 +43,7 @@ export default function StandingsPage() {
           <thead>
             <tr className="border-b border-zinc-100">
               <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400">#</th>
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400">Đội tuyển / VĐV</th>
+              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400">Đội / VĐV</th>
               <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Trận</th>
               <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Thắng</th>
               <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Thua</th>
@@ -101,11 +101,10 @@ export default function StandingsPage() {
             <button
               key={cat.id}
               onClick={() => setSelectedCategoryId(cat.id)}
-              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
-                selectedCategoryId === cat.id
+              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${selectedCategoryId === cat.id
                   ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105'
                   : 'bg-white/50 border border-foreground/5 text-foreground/40 hover:bg-white hover:text-foreground'
-              }`}
+                }`}
             >
               {cat.name}
             </button>
