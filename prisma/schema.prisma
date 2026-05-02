@@ -45,9 +45,24 @@ enum SlotSourceType {
   FROM_MATCH
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 //////////////////////////////////////////////////////
 // CORE
 //////////////////////////////////////////////////////
+
+model User {
+  id      String  @id @default(uuid())
+  username String @unique
+  password String
+  role    Role
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt 
+}
 
 model Team {
   id            String   @id @default(uuid())
@@ -57,6 +72,9 @@ model Team {
   doubles       Double[]
   wonMatches    Match[]
   matchResults  MatchResultLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Player {
@@ -70,6 +88,9 @@ model Player {
 
   doublesAsPlayer1 Double[] @relation("Player1")
   doublesAsPlayer2 Double[] @relation("Player2")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([teamId])
 }
@@ -93,6 +114,9 @@ model Double {
   matchA      Match[] @relation("MatchA")
   matchB      Match[] @relation("MatchB")
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   @@index([teamId])
   @@index([categoryId])
 }
@@ -104,6 +128,9 @@ model Category {
 
   doubles         Double[]
   timelineMatches TimelineMatch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Round {
@@ -114,6 +141,9 @@ model Round {
   pointLoss Int
 
   timelineMatches TimelineMatch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 //////////////////////////////////////////////////////
@@ -136,6 +166,9 @@ model TimelineMatch {
   matches     Match[]
   sourceSlots MatchSlot[] @relation("SourceMatch")
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   @@unique([roundId, categoryId, order])
   @@index([roundId])
   @@index([categoryId])
@@ -156,6 +189,9 @@ model MatchSlot {
   sourceMatch     TimelineMatch? @relation("SourceMatch", fields: [sourceMatchId], references: [id])
 
   sourceResult    MatchResult?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([timelineMatchId])
   @@index([sourceMatchId])
@@ -185,6 +221,9 @@ model Match {
   setScores       SetScore[]
   resultLogs      MatchResultLog[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
   @@index([timelineMatchId])
 }
 
@@ -197,6 +236,9 @@ model SetScore {
   setNumber Int
   scoreA    Int
   scoreB    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([matchId, setNumber])
   @@index([matchId])
@@ -213,6 +255,9 @@ model MatchResultLog {
 
   result  MatchResult
   points  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([matchId])
   @@index([teamId])
