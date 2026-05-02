@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TournamentState, Match, Category } from "@/lib/types";
 import { initialData } from "@/lib/data";
+import { toast } from "sonner";
 
 export default function AdminPage() {
   const [data, setData] = useState<TournamentState>(initialData);
@@ -61,7 +62,7 @@ export default function AdminPage() {
       if (t2) t2.points += p2;
 
       updateServer(newData);
-      alert("Match finished and points awarded!");
+      toast.success("Match finished and points awarded!");
     }
   };
 
@@ -75,13 +76,13 @@ export default function AdminPage() {
           <input
             type="password"
             placeholder="Enter Tournament Key"
-            className="w-full bg-white/80 border border-accent/20 rounded-lg p-4 mb-4 text-center outline-none focus:border-primary transition-colors text-foreground"
+            className="w-full bg-white border border-zinc-200 rounded-lg p-4 mb-4 text-center outline-none focus:border-primary transition-all text-zinc-900 placeholder:text-zinc-400"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && password === "1123" && setIsAuthorized(true)}
           />
           <button
-            onClick={() => password === "1123" ? setIsAuthorized(true) : alert("Wrong key")}
+            onClick={() => password === "1123" ? setIsAuthorized(true) : toast.error("Wrong key")}
             className="w-full bg-primary text-white font-black uppercase py-4 rounded-lg hover:brightness-110 transition-all"
           >
             Login
@@ -115,7 +116,7 @@ export default function AdminPage() {
                     <span className="text-[10px] font-black text-accent uppercase tracking-widest">{match.category}</span>
                     <p className="text-[8px] text-foreground/40 font-bold uppercase mt-1">{match.round}</p>
                   </div>
-                  <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${match.status === 'LIVE' ? 'bg-primary/20 text-primary' : 'bg-zinc-800 text-zinc-500'}`}>
+                  <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${match.status === 'LIVE' ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-zinc-100 text-zinc-400 border border-zinc-200'}`}>
                     {match.status}
                   </span>
                 </div>

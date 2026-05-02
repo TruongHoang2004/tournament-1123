@@ -34,9 +34,8 @@ export const metadata: Metadata = {
   description: "Live score tracking and leaderboard for the 1123 Badminton Tournament.",
 };
 
-import Navbar from "@/components/bar/Navbar";
-import Footer from "@/components/bar/Footer";
 import QueryProvider from "@/components/providers/query-provider";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -47,15 +46,8 @@ export default function RootLayout({
     <html lang="en" className={`${beVietnamPro.variable} antialiased`}>
       <body className="min-h-screen flex flex-col bg-background text-foreground relative isolate">
         <QueryProvider>
-          <Navbar />
-          <main
-            className="relative flex-1 flex flex-col w-full bg-transparent mt-20"
-          >
-            <div className="flex-1">
-              {children}
-            </div>
-            <Footer />
-          </main>
+          {children}
+          <Toaster position="top-center" richColors />
         </QueryProvider>
       </body>
     </html>

@@ -90,14 +90,6 @@ export default function Navbar() {
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/players' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
 
-          <Link
-            href="/admin"
-            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/admin' ? 'text-accent' : 'text-foreground/60 hover:text-accent'
-              }`}
-          >
-            Admin
-            <span className={`absolute bottom-0 left-0 h-0.5 bg-accent transition-all duration-300 ${pathname === '/admin' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-          </Link>
         </div>
       </div>
 

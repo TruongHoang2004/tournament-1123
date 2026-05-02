@@ -1,5 +1,6 @@
 import "dotenv/config";
-import { PrismaClient, Gender, CategoryCode, RoundType } from "@prisma/client";
+import { PrismaClient, Gender, CategoryCode, RoundType, Role } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 
@@ -23,6 +24,7 @@ async function main() {
     await prisma.round.deleteMany();
     await prisma.team.deleteMany();
     await prisma.category.deleteMany();
+    await prisma.user.deleteMany();
 
     console.log("✅ Cleaned existing data");
 
@@ -36,6 +38,28 @@ async function main() {
         prisma.category.create({ data: { code: CategoryCode.WOMEN_DOUBLE, name: "Women's Doubles" } }),
     ]);
     console.log(`✅ Seeded ${categories.length} categories`);
+
+    // ─── Seed Users ──────────────────────────────────────────────────
+    const hashedAdminPassword = await bcrypt.hash("1123", 10);
+    const hashedUserPassword = await bcrypt.hash("user123", 10);
+
+    const users = await Promise.all([
+        prisma.user.create({
+            data: {
+                username: "admin",
+                password: hashedAdminPassword,
+                role: Role.ADMIN
+            }
+        }),
+        prisma.user.create({
+            data: {
+                username: "truonghoang",
+                password: hashedUserPassword,
+                role: Role.USER
+            }
+        })
+    ]);
+    console.log(`✅ Seeded ${users.length} users (admin/1123, truonghoang/user123)`);
 
     // ─── Create Rounds ────────────────────────────────────────────────
     const [groupRound, semiRound, finalRound] = await Promise.all([
