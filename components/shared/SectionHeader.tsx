@@ -9,11 +9,11 @@ export default function SectionHeader({ title, subtitle, badge, className = "" }
   return (
     <div className={`flex flex-col md:flex-row md:items-center justify-between gap-6 ${className}`}>
       <div>
-        <h2 className="text-3xl font-bold text-white tracking-tight">{title}</h2>
-        {subtitle && <p className="text-gray-400 mt-2">{subtitle}</p>}
+        <h2 className="text-3xl font-black text-foreground tracking-tight italic uppercase">{title}</h2>
+        {subtitle && <p className="text-foreground/60 mt-2 font-medium">{subtitle}</p>}
       </div>
       {badge && (
-        <span className="px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full text-xs font-bold uppercase tracking-widest self-start md:self-center">
+        <span className="px-4 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] self-start md:self-center shadow-sm shadow-primary/5">
           {badge}
         </span>
       )}

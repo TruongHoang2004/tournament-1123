@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Outfit } from "next/font/google";
+import { Geist_Mono, Inter, Outfit, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const beVietnamPro = Be_Vietnam_Pro({
+  weight: "400",
+  variable: "--font-be-vietnam-pro",
+  subsets: ["latin", "vietnamese"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -32,12 +38,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased`}>
-      <body>
+    <html lang="en" className={`${beVietnamPro.variable} ${geistMono.variable} ${outfit.variable} antialiased`}>
+      <body className="min-h-screen flex flex-col">
         <QueryProvider>
           <Navbar />
-          <main className="pt-16 min-h-screen flex-1 flex flex-col justify-center">
-            {children}
+          <main
+            className="relative flex-1 flex flex-col w-full"
+            style={{ paddingTop: '5rem' }} // pt-28 equivalent (112px)
+          >
+            <div className="flex-1">
+              {children}
+            </div>
             <Footer />
           </main>
         </QueryProvider>

@@ -54,8 +54,8 @@ export default function Navbar() {
             Club Home
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
-          
-          <div className="w-[1px] h-4 bg-foreground/10 mx-2"></div>
+
+          <div className="w-px h-4 bg-foreground/10 mx-2"></div>
 
           <Link
             href="/tournament"
@@ -81,7 +81,15 @@ export default function Navbar() {
             Teams
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/teams' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
-          
+          <Link
+            href="/players"
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/players' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
+              }`}
+          >
+            Players
+            <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/players' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </Link>
+
           <Link
             href="/admin"
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/admin' ? 'text-accent' : 'text-foreground/60 hover:text-accent'

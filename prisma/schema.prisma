@@ -217,9 +217,3 @@ model MatchResultLog {
   @@index([matchId])
   @@index([teamId])
 }
-
-model TournamentConfig {
-  id  string @id @default(uuid())
-  key string 
-  value string
-}

@@ -1,13 +1,20 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #faf8ff;
   --foreground: #1a1025;
-  --primary: #e8762d;    /* Warm Orange — from logo */
+  --primary: #e8762d;
+  /* Warm Orange — from logo */
   --primary-light: #f4a261;
-  --secondary: #0ea5c9;  /* Cyan Blue — from reference */
-  --accent: #9333ea;     /* Vibrant Purple — from reference */
-  --magenta: #c026d3;    /* Magenta Pink — from reference */
+  --secondary: #0ea5c9;
+  /* Cyan Blue — from reference */
+  --accent: #9333ea;
+  /* Vibrant Purple — from reference */
+  --magenta: #c026d3;
+  /* Magenta Pink — from reference */
   --card-bg: rgba(255, 255, 255, 0.8);
   --card-border: rgba(147, 51, 234, 0.15);
   --glass-bg: rgba(255, 255, 255, 0.7);
@@ -25,11 +32,7 @@
   --font-sans: 'Outfit', 'Inter', var(--font-geist-sans);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+/* Tailwind v4 handles base resets automatically via @import */
 
 html,
 body {
@@ -78,7 +81,8 @@ body::before {
 .logo-1123 {
   color: var(--primary);
   filter: drop-shadow(0 0 8px rgba(232, 118, 45, 0.4));
-  font-family: 'Outfit', sans-serif; /* Using Outfit but making it extremely bold */
+  font-family: 'Outfit', sans-serif;
+  /* Using Outfit but making it extremely bold */
   position: relative;
   display: inline-block;
 }
@@ -115,4 +119,3 @@ body::before {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
 }
-

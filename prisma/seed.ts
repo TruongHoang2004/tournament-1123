@@ -22,7 +22,6 @@ async function main() {
     await prisma.player.deleteMany();
     await prisma.round.deleteMany();
     await prisma.team.deleteMany();
-    await prisma.tournament.deleteMany();
     await prisma.category.deleteMany();
 
     console.log("✅ Cleaned existing data");
@@ -38,31 +37,15 @@ async function main() {
     ]);
     console.log(`✅ Seeded ${categories.length} categories`);
 
-    // ─── Create Tournament ────────────────────────────────────────────
-    const tournament = await prisma.tournament.create({
-        data: {
-            name: "Giải Mùa Hè 2026",
-            date: new Date("2026-05-17"),
-        },
-    });
-    console.log(`✅ Created tournament: ${tournament.name}`);
-
     // ─── Create Rounds ────────────────────────────────────────────────
     const [groupRound, semiRound, finalRound] = await Promise.all([
-        prisma.round.create({
-            data: { name: RoundType.GROUP, tournamentId: tournament.id, pointWin: 2, pointLoss: 0 },
-        }),
-        prisma.round.create({
-            data: { name: RoundType.SEMI, tournamentId: tournament.id, pointWin: 3, pointLoss: 1 },
-        }),
-        prisma.round.create({
-            data: { name: RoundType.FINAL, tournamentId: tournament.id, pointWin: 4, pointLoss: 2 },
-        }),
+        prisma.round.create({ data: { name: RoundType.GROUP, pointWin: 2, pointLoss: 0 } }),
+        prisma.round.create({ data: { name: RoundType.SEMI, pointWin: 3, pointLoss: 1 } }),
+        prisma.round.create({ data: { name: RoundType.FINAL, pointWin: 4, pointLoss: 2 } }),
     ]);
     console.log("✅ Created rounds: GROUP, SEMI, FINAL");
 
-    // ─── Team Roster Data (from image) ────────────────────────────────
-    // DANH SÁCH CHIA ĐỘI ĐẤU GIẢI MÙA HÈ 2026
+    // ─── Team Roster Data ─────────────────────────────────────────────
     const teamsData = [
         {
             name: "Team A",
@@ -137,10 +120,7 @@ async function main() {
         const team = await prisma.team.create({
             data: {
                 name: teamData.name,
-                tournamentId: tournament.id,
-                players: {
-                    create: teamData.players,
-                },
+                players: { create: teamData.players },
             },
             include: { players: true },
         });
@@ -153,7 +133,6 @@ async function main() {
     const totalPlayers = await prisma.player.count();
     const totalTeams = await prisma.team.count();
     console.log(`\n🏸 Seed complete!`);
-    console.log(`   Tournament: ${tournament.name}`);
     console.log(`   Teams: ${totalTeams}`);
     console.log(`   Players: ${totalPlayers}`);
     console.log(`   Categories: ${categories.length}`);
@@ -161,9 +140,7 @@ async function main() {
 }
 
 main()
-    .then(async () => {
-        await prisma.$disconnect();
-    })
+    .then(async () => { await prisma.$disconnect(); })
     .catch(async (e) => {
         console.error(e);
         await prisma.$disconnect();
