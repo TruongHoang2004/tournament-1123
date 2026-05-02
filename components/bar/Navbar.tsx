@@ -66,6 +66,14 @@ export default function Navbar() {
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/tournament' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
+            href="/matches"
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/matches' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
+              }`}
+          >
+            Matches
+            <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/matches' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </Link>
+          <Link
             href="/standings"
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/standings' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}

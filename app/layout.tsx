@@ -43,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${beVietnamPro.variable} antialiased`}>
+    <html lang="en" className={`${beVietnamPro.variable} antialiased`} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col bg-background text-foreground relative isolate">
         <QueryProvider>
           {children}

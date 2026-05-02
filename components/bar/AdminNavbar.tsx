@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { LayoutDashboard, Users, Trophy, LogOut, Home } from "lucide-react";
+import { LayoutDashboard, Users, Trophy, LogOut, Home, Shuffle, Calendar } from "lucide-react";
 
 export default function AdminNavbar() {
   const pathname = usePathname();
@@ -31,6 +31,8 @@ export default function AdminNavbar() {
   const navItems = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Doubles Management", href: "/admin/doubles", icon: Users },
+    { name: "Group Assignment", href: "/admin/groups", icon: Shuffle },
+    { name: "Match Management", href: "/admin/matches", icon: Calendar },
     { name: "Tournament Settings", href: "/admin/settings", icon: Trophy },
   ];
 

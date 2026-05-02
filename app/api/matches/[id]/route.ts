@@ -129,6 +129,28 @@ export async function PATCH(
       return NextResponse.json(finalMatch);
     }
 
+    // 3. Bắt đầu trận đấu (Set status to Live)
+    if (body.action === "startMatch") {
+      const match = await prisma.match.update({
+        where: { id },
+        data: { playedAt: new Date() },
+      });
+      return NextResponse.json(match);
+    }
+
+    // 4. Reset trận đấu (Set back to Upcoming)
+    if (body.action === "resetMatch") {
+      await prisma.$transaction([
+        prisma.match.update({
+          where: { id },
+          data: { winnerTeamId: null, playedAt: null },
+        }),
+        prisma.setScore.deleteMany({ where: { matchId: id } }),
+        prisma.matchResultLog.deleteMany({ where: { matchId: id } }),
+      ]);
+      return NextResponse.json({ success: true });
+    }
+
     return NextResponse.json({ error: "Unknown action" }, { status: 400 });
   } catch (error) {
     console.error("PATCH /api/matches/[id] error:", error);

@@ -51,10 +51,16 @@ export async function GET(request: NextRequest) {
 
             let score1 = 0;
             let score2 = 0;
-            runtimeMatch.setScores.forEach((set: any) => {
-                if (set.scoreA > set.scoreB) score1++;
-                else if (set.scoreB > set.scoreA) score2++;
-            });
+            
+            if (runtimeMatch.setScores.length === 1) {
+                score1 = runtimeMatch.setScores[0].scoreA;
+                score2 = runtimeMatch.setScores[0].scoreB;
+            } else {
+                runtimeMatch.setScores.forEach((set: any) => {
+                    if (set.scoreA > set.scoreB) score1++;
+                    else if (set.scoreB > set.scoreA) score2++;
+                });
+            }
 
             return {
                 id: runtimeMatch.id,
