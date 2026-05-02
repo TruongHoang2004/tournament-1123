@@ -50,7 +50,7 @@ async function main() {
         {
             name: "Team A",
             players: [
-                { name: "Toàn (Út)", gender: Gender.MALE, level: 3 },
+                { name: "Toàn (Út)", gender: Gender.MALE, level: 1 },
                 { name: "Nga KM", gender: Gender.FEMALE, level: 3 },
                 { name: "Hoa", gender: Gender.FEMALE, level: 3 },
                 { name: "Tùng", gender: Gender.MALE, level: 3 },
@@ -83,7 +83,7 @@ async function main() {
         {
             name: "Team D",
             players: [
-                { name: "Hà KM", gender: Gender.FEMALE, level: 3 },
+                { name: "Hà KM", gender: Gender.MALE, level: 3 },
                 { name: "Chi", gender: Gender.FEMALE, level: 3 },
                 { name: "An", gender: Gender.MALE, level: 3 },
                 { name: "Mạnh KM", gender: Gender.MALE, level: 3 },

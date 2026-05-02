@@ -1,18 +1,10 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-// GET /api/teams?tournamentId=xxx — Lấy danh sách đội trong giải đấu
-export async function GET(request: Request) {
+// GET /api/teams — Lấy danh sách đội trong giải đấu
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const tournamentId = searchParams.get("tournamentId");
-
-    if (!tournamentId) {
-      return NextResponse.json({ error: "tournamentId is required" }, { status: 400 });
-    }
-
     const teams = await prisma.team.findMany({
-      where: { tournamentId },
       include: {
         players: true,
         doubles: {
@@ -32,12 +24,12 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const { tournamentId, name } = await request.json();
-    if (!tournamentId || !name) {
-      return NextResponse.json({ error: "tournamentId and name are required" }, { status: 400 });
+    if (!name) {
+      return NextResponse.json({ error: "name is required" }, { status: 400 });
     }
 
     const team = await prisma.team.create({
-      data: { name, tournamentId },
+      data: { name },
     });
 
     return NextResponse.json(team, { status: 201 });

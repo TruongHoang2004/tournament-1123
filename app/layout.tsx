@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Inter, Outfit, Be_Vietnam_Pro } from "next/font/google";
+import { Geist_Mono, Inter, Outfit, Be_Vietnam_Pro, Instrument_Sans } from "next/font/google";
 import "./globals.css";
+
+const instrumentSans = Instrument_Sans({
+  weight: "400",
+  variable: "--font-instrument-sans",
+  subsets: ["latin"],
+});
 
 const beVietnamPro = Be_Vietnam_Pro({
   weight: "400",
@@ -38,13 +44,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${beVietnamPro.variable} ${geistMono.variable} ${outfit.variable} antialiased`}>
-      <body className="min-h-screen flex flex-col">
+    <html lang="en" className={`${beVietnamPro.variable} antialiased`}>
+      <body className="min-h-screen flex flex-col bg-background text-foreground relative isolate">
         <QueryProvider>
           <Navbar />
           <main
-            className="relative flex-1 flex flex-col w-full"
-            style={{ paddingTop: '5rem' }} // pt-28 equivalent (112px)
+            className="relative flex-1 flex flex-col w-full bg-transparent mt-20"
           >
             <div className="flex-1">
               {children}

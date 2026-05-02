@@ -22,7 +22,7 @@ export const PlayerCard = ({ player }: { player: any }) => {
                     <span className="text-sm font-bold text-foreground/80">{player.team?.name || 'Vãng lai'}</span>
                 </div>
                 <div className="flex flex-col items-end">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-foreground/40 mb-1">Trình</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-foreground/40 mb-1">Trình độ</span>
                     <span className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20 text-sm font-black italic">
                         {player.level}
                     </span>

@@ -2,6 +2,11 @@ import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 export const teamService = {
+  getAll: async () => {
+    const res = await api.get("/teams");
+    return res.data;
+  },
+
   getAllByTournament: async (tournamentId: string) => {
     const res = await api.get("/teams", { params: { tournamentId } });
     return res.data;
@@ -37,5 +42,12 @@ export function useTeam(id: string) {
     queryKey: teamKeys.detail(id),
     queryFn: () => teamService.getById(id),
     enabled: !!id,
+  });
+}
+
+export function useAllTeams() {
+  return useQuery({
+    queryKey: teamKeys.all,
+    queryFn: () => teamService.getAll(),
   });
 }

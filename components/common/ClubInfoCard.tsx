@@ -28,7 +28,7 @@ export function ClubInfoCard({ icon: Icon, iconBg, label, value, link }: ClubInf
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
         >
-          Tim hieu them
+          Tìm Hiểu Thêm
         </Link>
       )}
     </div>

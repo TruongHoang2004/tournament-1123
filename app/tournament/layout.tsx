@@ -19,9 +19,9 @@ export default function TournamentLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white pt-24">
+    <div className="min-h-screen bg-transparent text-foreground pt-24">
       {/* Sub-navbar for Tournament navigation */}
-      <div className="sticky top-20 z-40 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5 py-4 mb-8">
+      <div className="sticky top-20 z-40 glass border-b border-white/20 py-4 mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8 overflow-x-auto no-scrollbar">
             {navItems.map((item) => {
@@ -32,8 +32,8 @@ export default function TournamentLayout({
                   href={item.href}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 whitespace-nowrap ${
                     isActive
-                      ? "bg-blue-600/10 text-blue-400 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
-                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                      ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_15px_rgba(232,118,45,0.12)]"
+                      : "text-foreground/60 hover:text-primary hover:bg-white/60"
                   }`}
                 >
                   <item.icon className="w-4 h-4" />

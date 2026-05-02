@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :root {
   --background: #faf8ff;
@@ -29,7 +26,7 @@
   --color-secondary: #0ea5c9;
   --color-accent: #9333ea;
   --color-magenta: #c026d3;
-  --font-sans: 'Outfit', 'Inter', var(--font-geist-sans);
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Tailwind v4 handles base resets automatically via @import */
