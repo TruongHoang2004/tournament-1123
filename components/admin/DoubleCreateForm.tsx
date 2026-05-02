@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { 
-  useTeams, 
-  useCategories, 
-  usePlayers, 
-  useCreateDouble 
+import {
+  useTeams,
+  useCategories,
+  usePlayers,
+  useCreateDouble
 } from "@/services";
-import { 
-  UserPlus, 
-  Plus, 
-  Loader2, 
-  AlertCircle 
+import {
+  UserPlus,
+  Plus,
+  Loader2,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -56,13 +56,13 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
         player2Id,
         point,
       });
-      
+
       // Reset form
       setPlayer1Id("");
       setPlayer2Id("");
-      toast.success("Tạo cặp đấu thành công!");
+      toast.success("Tạo bộ đôi thành công!");
     } catch (err: any) {
-      toast.error(err.response?.data?.error || "Lỗi khi tạo cặp đấu");
+      toast.error(err.response?.data?.error || "Lỗi khi tạo bộ đôi");
     }
   };
 
@@ -72,7 +72,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
         <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center">
           <UserPlus className="w-5 h-5 text-primary" />
         </div>
-        <h2 className="text-xl font-bold">Thêm cặp đấu mới</h2>
+        <h2 className="text-xl font-bold">Thêm bộ đôi mới</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -80,7 +80,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Đội tuyển</label>
           <div className="relative">
-            <select 
+            <select
               value={selectedTeamId}
               onChange={(e) => {
                 onTeamChange(e.target.value);
@@ -101,7 +101,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Hạng mục thi đấu</label>
           <div className="relative">
-            <select 
+            <select
               value={selectedCategoryId}
               onChange={(e) => setSelectedCategoryId(e.target.value)}
               className="w-full bg-white border border-zinc-200 rounded-xl p-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-zinc-900 appearance-none cursor-pointer"
@@ -118,7 +118,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Vận động viên 1</label>
-            <select 
+            <select
               value={player1Id}
               onChange={(e) => setPlayer1Id(e.target.value)}
               disabled={!selectedTeamId}
@@ -132,7 +132,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Vận động viên 2</label>
-            <select 
+            <select
               value={player2Id}
               onChange={(e) => setPlayer2Id(e.target.value)}
               disabled={!selectedTeamId}
@@ -165,7 +165,7 @@ export function DoubleCreateForm({ selectedTeamId, onTeamChange }: DoubleCreateF
           <ul className="list-disc ml-4 space-y-1">
             <li>Hai vận động viên phải cùng thuộc một đội tuyển.</li>
             <li>Mỗi vận động viên chỉ tham gia tối đa 1 nội dung.</li>
-            <li>Mỗi đội chỉ có duy nhất 1 cặp đấu cho mỗi nội dung.</li>
+            <li>Mỗi đội chỉ có duy nhất 1 bộ đôi cho mỗi nội dung.</li>
           </ul>
         </div>
       </div>

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(doubles);
     } catch (e) {
         console.error("Error fetching doubles:", e);
-        return NextResponse.json({ error: "Không thể tải danh sách cặp đấu" }, { status: 500 });
+        return NextResponse.json({ error: "Không thể tải danh sách bộ đôi" }, { status: 500 });
     }
 }
 
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         }
 
         if (player1Id === player2Id) {
-            return NextResponse.json({ error: "Một cặp đấu phải bao gồm hai vận động viên khác nhau" }, { status: 400 });
+            return NextResponse.json({ error: "Một bộ đôi phải bao gồm hai vận động viên khác nhau" }, { status: 400 });
         }
 
         // 2. Validate players and team
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
 
         if (existingDoubleCategory) {
             return NextResponse.json({
-                error: "Đội này đã có một cặp đấu được đăng ký cho hạng mục này"
+                error: "Đội này đã có một bộ đôi được đăng ký cho hạng mục này"
             }, { status: 400 });
         }
 
@@ -107,6 +107,6 @@ export async function POST(request: NextRequest) {
 
     } catch (e) {
         console.error("Error creating double:", e);
-        return NextResponse.json({ error: "Không thể tạo cặp đấu" }, { status: 500 });
+        return NextResponse.json({ error: "Không thể tạo bộ đôi" }, { status: 500 });
     }
 }

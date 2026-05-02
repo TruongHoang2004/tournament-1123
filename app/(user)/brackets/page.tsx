@@ -39,11 +39,10 @@ export default function BracketsPage() {
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-              selectedCategory === cat 
-              ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105' 
-              : 'bg-white/50 border border-foreground/5 text-foreground/40 hover:bg-white hover:text-foreground'
-            }`}
+            className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${selectedCategory === cat
+                ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105'
+                : 'bg-white/50 border border-foreground/5 text-foreground/40 hover:bg-white hover:text-foreground'
+              }`}
           >
             {cat}
           </button>
@@ -53,7 +52,7 @@ export default function BracketsPage() {
       {/* Bracket Tree Visualization */}
       <div className="relative overflow-x-auto pb-12">
         <div className="min-w-[800px] flex justify-center items-center py-20 gap-20">
-          
+
           {/* Semi-Finals */}
           <div className="flex flex-col gap-32">
             {[bracketData.semi1, bracketData.semi2].map((match, i) => (
@@ -80,31 +79,31 @@ export default function BracketsPage() {
               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent">Grand Final</span>
             </div>
             <div className="w-80 glass p-6 border-2 border-accent shadow-2xl shadow-accent/10 scale-110 relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-1 bg-accent text-white text-[8px] font-black uppercase tracking-tighter">Live</div>
-               <div className="space-y-4 py-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-black uppercase italic tracking-tighter">{getTeamName(bracketData.final.team1)}</span>
-                    <span className="text-3xl font-black text-accent">{bracketData.final.score1}</span>
-                  </div>
-                  <div className="flex justify-center py-2">
-                    <div className="w-8 h-[1px] bg-foreground/10"></div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-black uppercase italic tracking-tighter">{getTeamName(bracketData.final.team2)}</span>
-                    <span className="text-3xl font-black text-accent">{bracketData.final.score2}</span>
-                  </div>
-               </div>
+              <div className="absolute top-0 right-0 p-1 bg-accent text-white text-[8px] font-black uppercase tracking-tighter">Live</div>
+              <div className="space-y-4 py-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-black uppercase italic tracking-tighter">{getTeamName(bracketData.final.team1)}</span>
+                  <span className="text-3xl font-black text-accent">{bracketData.final.score1}</span>
+                </div>
+                <div className="flex justify-center py-2">
+                  <div className="w-8 h-px bg-foreground/10"></div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-black uppercase italic tracking-tighter">{getTeamName(bracketData.final.team2)}</span>
+                  <span className="text-3xl font-black text-accent">{bracketData.final.score2}</span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Winner Section */}
           <div className="flex flex-col items-center gap-4">
-             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/30 animate-pulse">
-               <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z" />
-               </svg>
-             </div>
-             <p className="text-[10px] font-black uppercase tracking-[0.5em] text-foreground/30">The Champions</p>
+            <div className="w-20 h-20 rounded-full bg-linear-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/30 animate-pulse">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z" />
+              </svg>
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-foreground/30">The Champions</p>
           </div>
 
         </div>

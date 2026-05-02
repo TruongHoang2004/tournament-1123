@@ -10,7 +10,7 @@ interface DoubleListProps {
 export function DoubleList({ selectedTeamId }: DoubleListProps) {
   const { data: doubles, isLoading: doublesLoading } = useDoubles();
 
-  const filteredDoubles = selectedTeamId 
+  const filteredDoubles = selectedTeamId
     ? doubles?.filter((d: any) => d.teamId === selectedTeamId)
     : doubles;
 
@@ -18,10 +18,10 @@ export function DoubleList({ selectedTeamId }: DoubleListProps) {
     <div className="lg:col-span-7 space-y-6">
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-xs font-black uppercase tracking-[0.2em] text-zinc-500">
-          {selectedTeamId ? "Danh sách cặp đấu của đội" : "Danh sách các cặp đấu hiện tại"}
+          {selectedTeamId ? "Danh sách bộ đôi của đội" : "Danh sách các bộ đôi hiện tại"}
         </h2>
         <span className="text-[10px] font-bold bg-white px-2 py-1 rounded border border-zinc-200 text-zinc-600">
-          {filteredDoubles?.length || 0} Cặp đấu
+          {filteredDoubles?.length || 0} Bộ đôi
         </span>
       </div>
 
@@ -33,7 +33,7 @@ export function DoubleList({ selectedTeamId }: DoubleListProps) {
       ) : filteredDoubles?.length === 0 ? (
         <div className="glass p-12 text-center text-zinc-500 border-dashed">
           <Users className="w-12 h-12 mx-auto mb-4 opacity-20" />
-          <p className="text-sm font-bold">Chưa có cặp đấu nào được đăng ký.</p>
+          <p className="text-sm font-bold">Chưa có bộ đôi nào được đăng ký.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
@@ -48,7 +48,7 @@ export function DoubleList({ selectedTeamId }: DoubleListProps) {
                 </div>
                 <Trophy className="w-4 h-4 text-zinc-300 group-hover:text-accent transition-colors" />
               </div>
-              
+
               <div className="flex items-center gap-4">
                 <div className="flex-1 flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
                   <div className="w-8 h-8 rounded-full bg-zinc-200 text-zinc-600 flex items-center justify-center text-[10px] font-black uppercase">
@@ -56,9 +56,9 @@ export function DoubleList({ selectedTeamId }: DoubleListProps) {
                   </div>
                   <span className="text-sm font-bold text-zinc-800">{double.player1?.name}</span>
                 </div>
-                
+
                 <div className="text-[10px] font-black text-zinc-300 italic">VS</div>
-                
+
                 <div className="flex-1 flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
                   <div className="w-8 h-8 rounded-full bg-zinc-200 text-zinc-600 flex items-center justify-center text-[10px] font-black uppercase">
                     {double.player2?.name[0]}

@@ -82,6 +82,14 @@ export default function Navbar() {
             <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/teams' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
           </Link>
           <Link
+            href="/doubles"
+            className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/doubles' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
+              }`}
+          >
+            Doubles
+            <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${pathname === '/doubles' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+          </Link>
+          <Link
             href="/players"
             className={`group relative py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === '/players' ? 'text-primary' : 'text-foreground/60 hover:text-primary'
               }`}
