@@ -97,11 +97,10 @@ export default function PlayerDetailPage({ params }: { params: Promise<{ id: str
   const liveMatches = matches.filter((m) => !m.winnerTeamId && !!m.playedAt);
   const upcomingMatches = matches.filter((m) => !m.winnerTeamId && !m.playedAt);
 
-  // Tính thống kê
-  const totalMatchesCount = matches.length;
-  const winsCount = matches.filter((m) => {
+  // Tính thống kê (Chỉ tính các trận đã có kết quả/đã hoàn thành)
+  const totalMatchesCount = playedMatches.length;
+  const winsCount = playedMatches.filter((m) => {
     const isDoubleA = m.doubleA.player1.name === player.name || m.doubleA.player2.name === player.name;
-    const isWinnerA = m.winnerTeamId === m.doubleA.id || m.winnerTeamId === m.doubleA.teamId;
     const isDoubleB = m.doubleB.player1.name === player.name || m.doubleB.player2.name === player.name;
 
     const winnerIdMatchesDoubleA = m.winnerTeamId === m.doubleA.id;
