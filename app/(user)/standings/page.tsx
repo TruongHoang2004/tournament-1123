@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useCategories } from "@/services";
-import { Trophy, Users, Loader2 } from "lucide-react";
+import { Users, Loader2, LayoutGrid } from "lucide-react";
 
 export default function StandingsPage() {
   const { data: categories } = useCategories();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-  const [standings, setStandings] = useState<{ groupA: any[], groupB: any[] } | null>(null);
+  const [standings, setStandings] = useState<{
+    groupA: any[];
+    groupB: any[];
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -20,8 +23,8 @@ export default function StandingsPage() {
     if (selectedCategoryId) {
       setIsLoading(true);
       fetch(`/api/standings?categoryId=${selectedCategoryId}`)
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           setStandings(data);
           setIsLoading(false);
         })
@@ -29,82 +32,81 @@ export default function StandingsPage() {
     }
   }, [selectedCategoryId]);
 
-  const renderTable = (groupName: string, data: any[]) => (
-    <div className="glass p-6 overflow-hidden">
-      <div className="flex items-center gap-3 mb-6">
+  const renderGroupCard = (groupName: string, data: any[]) => (
+    <div className="glass p-4 md:p-6 overflow-hidden">
+      <div className="flex items-center gap-3 mb-5">
         <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-          <Trophy className="w-5 h-5 text-primary" />
+          <LayoutGrid className="w-5 h-5 text-primary" />
         </div>
-        <h2 className="text-2xl font-black uppercase tracking-tight">Bảng {groupName}</h2>
+        <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">
+          Bảng {groupName}
+        </h2>
+        <span className="ml-auto text-[10px] font-black uppercase tracking-widest text-zinc-400 bg-zinc-100 px-3 py-1 rounded-full">
+          {data?.length || 0} đội
+        </span>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-zinc-100">
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400">#</th>
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400">Đội / VĐV</th>
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Trận</th>
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Thắng</th>
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center">Thua</th>
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-zinc-400 text-center" title="Tổng điểm ghi được trong các set">Điểm phụ</th>
-              <th className="py-4 px-4 text-[10px] font-black uppercase tracking-widest text-primary text-center">Điểm số</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="py-8 text-center text-zinc-500 font-bold">Chưa có dữ liệu</td>
-              </tr>
-            ) : (
-              data?.map((team, index) => (
-                <tr key={team.doubleId} className="border-b border-zinc-50 hover:bg-zinc-50/50 transition-colors">
-                  <td className="py-4 px-4 font-bold text-zinc-500">{index + 1}</td>
-                  <td className="py-4 px-4">
-                    <p className="text-sm font-bold text-zinc-900">{team.teamName}</p>
-                    <p className="text-[10px] text-zinc-500">{team.player1Name} & {team.player2Name}</p>
-                  </td>
-                  <td className="py-4 px-4 text-center font-medium">{team.matchesPlayed}</td>
-                  <td className="py-4 px-4 text-center font-bold text-green-600">{team.wins}</td>
-                  <td className="py-4 px-4 text-center font-bold text-red-600">{team.losses}</td>
-                  <td className="py-4 px-4 text-center font-medium text-zinc-500">{team.pointsScored}</td>
-                  <td className="py-4 px-4 text-center font-black text-primary text-lg">{team.points}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      {data?.length === 0 ? (
+        <div className="py-8 text-center text-zinc-400 font-bold text-sm">
+          Chưa có đội nào được phân bảng
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {data?.map((team, index) => (
+            <div
+              key={team.doubleId}
+              className="flex items-center gap-4 p-3 md:p-4 rounded-2xl bg-white/60 border border-zinc-100 hover:border-primary/20 hover:shadow-sm transition-all"
+            >
+              <span className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-xs font-black text-slate-600 shrink-0">
+                {index + 1}
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-black text-zinc-900 truncate">
+                  {team.teamName}
+                </p>
+                <p className="text-[10px] text-zinc-400 truncate">
+                  {team.player1Name} & {team.player2Name}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 
   return (
     <div className="min-h-screen pb-20">
-      <section className="relative pt-28 pb-12 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <section className="relative pt-20 md:pt-28 pb-12 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6 animate-fade-in">
             <Users className="w-4 h-4 text-primary" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-primary">Vòng bảng</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-primary">
+              Vòng bảng
+            </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter mb-4 text-zinc-900">
-            Bảng xếp hạng <span className="gradient-text">Group Stage</span>
+          <h1 className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter mb-4 text-zinc-900">
+            Bảng đấu{" "}
+            <span className="gradient-text">Group Stage</span>
           </h1>
           <p className="text-zinc-500 font-medium text-sm max-w-2xl">
-            Theo dõi điểm số và thứ hạng của các đội trong vòng bảng. 2 đội đứng đầu mỗi bảng sẽ tiến vào vòng Bán kết.
+            Danh sách các đội trong từng bảng đấu. 2 đội đứng đầu mỗi bảng sẽ
+            tiến vào vòng Bán kết.
           </p>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 mb-12">
+      <section className="max-w-7xl mx-auto px-4 md:px-6 mb-10">
         <div className="flex gap-2 overflow-x-auto pb-4 hide-scrollbar">
           {categories?.map((cat: any) => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategoryId(cat.id)}
-              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${selectedCategoryId === cat.id
-                  ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105'
-                  : 'bg-white/50 border border-foreground/5 text-foreground/40 hover:bg-white hover:text-foreground'
-                }`}
+              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+                selectedCategoryId === cat.id
+                  ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105"
+                  : "bg-white/50 border border-foreground/5 text-foreground/40 hover:bg-white hover:text-foreground"
+              }`}
             >
               {cat.name}
             </button>
@@ -112,15 +114,15 @@ export default function StandingsPage() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6">
+      <section className="max-w-7xl mx-auto px-4 md:px-6">
         {isLoading ? (
           <div className="py-20 flex justify-center">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {renderTable("A", standings?.groupA || [])}
-            {renderTable("B", standings?.groupB || [])}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            {renderGroupCard("A", standings?.groupA || [])}
+            {renderGroupCard("B", standings?.groupB || [])}
           </div>
         )}
       </section>

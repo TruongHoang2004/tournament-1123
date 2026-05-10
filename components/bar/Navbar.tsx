@@ -18,7 +18,8 @@ import {
 const navItems = [
   { href: "/", label: "Trang chủ", icon: Home },
   { href: "/matches", label: "Trận đấu", icon: Swords },
-  { href: "/standings", label: "Bảng xếp hạng", icon: Trophy },
+  { href: "/standings", label: "Bảng đấu", icon: Users },
+  { href: "/rankings", label: "Bảng xếp hạng", icon: Trophy },
   { href: "/brackets", label: "Sơ đồ thi đấu", icon: GitBranch },
   { href: "/teams", label: "Team", icon: Users },
   { href: "/doubles", label: "Cặp đôi", icon: Handshake },
