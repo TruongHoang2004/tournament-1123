@@ -1,8 +1,12 @@
-import { Gender, Player } from "@prisma/client";
+import { Gender } from "@prisma/client";
+import Link from "next/link";
 
 export const PlayerCard = ({ player }: { player: any }) => {
     return (
-        <div className="glass p-6 hover:border-primary transition-all duration-300 group">
+        <Link 
+            href={`/players/${player.id}`}
+            className="glass p-6 hover:border-primary transition-all duration-300 group block cursor-pointer"
+        >
             <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-black italic tracking-tight text-foreground group-hover:text-primary transition-colors">
                     {player.name}
@@ -28,6 +32,6 @@ export const PlayerCard = ({ player }: { player: any }) => {
                     </span>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }

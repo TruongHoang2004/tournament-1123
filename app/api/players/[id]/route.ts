@@ -10,12 +10,65 @@ export async function GET(
     const { id } = await params;
     const player = await prisma.player.findUnique({
       where: { id },
-      include: { team: true, doublesAsPlayer1: true, doublesAsPlayer2: true },
+      include: { team: true },
     });
+
     if (!player) {
       return NextResponse.json({ error: "Player not found" }, { status: 404 });
     }
-    return NextResponse.json(player);
+
+    // Lấy các double ID mà player này là thành viên
+    const doubles = await prisma.double.findMany({
+      where: {
+        OR: [
+          { player1Id: id },
+          { player2Id: id },
+        ],
+      },
+      select: { id: true },
+    });
+
+    const doubleIds = doubles.map((d) => d.id);
+
+    // Lấy tất cả các trận đấu liên quan đến các cặp đôi này
+    const matches = await prisma.match.findMany({
+      where: {
+        OR: [
+          { doubleAId: { in: doubleIds } },
+          { doubleBId: { in: doubleIds } },
+        ],
+      },
+      include: {
+        doubleA: {
+          include: {
+            team: true,
+            player1: true,
+            player2: true,
+          },
+        },
+        doubleB: {
+          include: {
+            team: true,
+            player1: true,
+            player2: true,
+          },
+        },
+        setScores: true,
+        timelineMatch: {
+          include: {
+            round: true,
+            category: true,
+          },
+        },
+      },
+      orderBy: {
+        timelineMatch: {
+          order: "asc",
+        },
+      },
+    });
+
+    return NextResponse.json({ player, matches });
   } catch (error) {
     console.error("GET /api/players/[id] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

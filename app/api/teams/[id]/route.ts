@@ -19,6 +19,20 @@ export async function GET(
           include: {
             match: {
               include: {
+                doubleA: {
+                  include: {
+                    team: true,
+                    player1: true,
+                    player2: true,
+                  },
+                },
+                doubleB: {
+                  include: {
+                    team: true,
+                    player1: true,
+                    player2: true,
+                  },
+                },
                 timelineMatch: { include: { round: true, category: true } },
                 setScores: { orderBy: { setNumber: "asc" } },
               },
