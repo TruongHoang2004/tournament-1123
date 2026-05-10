@@ -32,11 +32,13 @@ interface Match {
 function SetScoreRow({ 
   setNum, 
   currentSet, 
-  onSave 
+  onSave,
+  onChange
 }: { 
   setNum: number; 
   currentSet: { scoreA: number, scoreB: number }; 
-  onSave: (setNum: number, sA: number, sB: number) => void 
+  onSave: (setNum: number, sA: number, sB: number) => void;
+  onChange: (scoreA: number, scoreB: number) => void;
 }) {
   const [sA, setSA] = useState(currentSet.scoreA);
   const [sB, setSB] = useState(currentSet.scoreB);
@@ -45,6 +47,16 @@ function SetScoreRow({
     setSA(currentSet.scoreA);
     setSB(currentSet.scoreB);
   }, [currentSet.scoreA, currentSet.scoreB]);
+
+  const updateSA = (val: number) => {
+    setSA(val);
+    onChange(val, sB);
+  };
+
+  const updateSB = (val: number) => {
+    setSB(val);
+    onChange(sA, val);
+  };
 
   return (
     <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
@@ -64,14 +76,14 @@ function SetScoreRow({
         {/* Team A Score Controls */}
         <div className="flex items-center gap-3">
           <button 
-            onClick={() => setSA(Math.max(0, sA - 1))}
+            onClick={() => updateSA(Math.max(0, sA - 1))}
             className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 active:scale-90 transition-all"
           >
             <Minus className="w-5 h-5" />
           </button>
           <div className="text-4xl font-black w-12 text-center text-slate-800">{sA}</div>
           <button 
-            onClick={() => setSA(sA + 1)}
+            onClick={() => updateSA(sA + 1)}
             className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white hover:bg-blue-700 shadow-lg shadow-blue-100 active:scale-90 transition-all"
           >
             <Plus className="w-6 h-6" />
@@ -83,14 +95,14 @@ function SetScoreRow({
         {/* Team B Score Controls */}
         <div className="flex items-center gap-3">
           <button 
-            onClick={() => setSB(sB + 1)}
+            onClick={() => updateSB(sB + 1)}
             className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center text-white hover:bg-purple-700 shadow-lg shadow-purple-100 active:scale-90 transition-all"
           >
             <Plus className="w-6 h-6" />
           </button>
           <div className="text-4xl font-black w-12 text-center text-slate-800">{sB}</div>
           <button 
-            onClick={() => setSB(Math.max(0, sB - 1))}
+            onClick={() => updateSB(Math.max(0, sB - 1))}
             className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 active:scale-90 transition-all"
           >
             <Minus className="w-5 h-5" />
@@ -107,6 +119,7 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
   const [match, setMatch] = useState<Match | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [tempScores, setTempScores] = useState<Record<number, { scoreA: number; scoreB: number }>>({});
 
   useEffect(() => {
     fetchMatch();
@@ -118,6 +131,13 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
       if (!res.ok) throw new Error("Match not found");
       const data = await res.json();
       setMatch(data);
+
+      // Initialize tempScores from the fetched match's setScores
+      const initial: Record<number, { scoreA: number; scoreB: number }> = {};
+      data.setScores?.forEach((s: any) => {
+        initial[s.setNumber] = { scoreA: s.scoreA, scoreB: s.scoreB };
+      });
+      setTempScores(initial);
     } catch (error) {
       toast.error("Không tìm thấy trận đấu");
       router.push("/admin/matches");
@@ -145,16 +165,30 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
     if (!confirm("Xác nhận kết thúc trận đấu và chốt kết quả?")) return;
     setSaving(true);
     try {
+      const scoresPayload = Object.entries(tempScores).map(([setNumber, score]) => ({
+        setNumber: parseInt(setNumber),
+        scoreA: score.scoreA,
+        scoreB: score.scoreB
+      }));
+
       const res = await fetch(`/api/matches/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "finalize" }),
+        body: JSON.stringify({ 
+          action: "finalize",
+          scores: scoresPayload
+        }),
       });
-      if (!res.ok) throw new Error("Failed to finalize match");
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Lỗi khi chốt kết quả");
+      }
+
       toast.success("Trận đấu đã kết thúc!");
       router.push("/admin/matches");
-    } catch (error) {
-      toast.error("Lỗi khi chốt kết quả");
+    } catch (error: any) {
+      toast.error(error.message || "Lỗi khi chốt kết quả");
     } finally {
       setSaving(false);
     }
@@ -266,6 +300,12 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
                   setNum={setNum} 
                   currentSet={currentSet} 
                   onSave={handleUpdateScore} 
+                  onChange={(sA, sB) => {
+                    setTempScores(prev => ({
+                      ...prev,
+                      [setNum]: { scoreA: sA, scoreB: sB }
+                    }));
+                  }}
                 />
               );
             })}

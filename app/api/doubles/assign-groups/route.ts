@@ -10,11 +10,27 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const { groupA, groupB } = await request.json();
+        const body = await request.json();
+
+        // 1. Support for individual double assignments
+        if (body.assignments && Array.isArray(body.assignments)) {
+            await prisma.$transaction(async (tx) => {
+                for (const item of body.assignments) {
+                    await tx.double.update({
+                        where: { id: item.doubleId },
+                        data: { group: item.group }
+                    });
+                }
+            });
+            return NextResponse.json({ success: true, message: "Cập nhật bảng đấu thành công" });
+        }
+
+        // 2. Support for team draw (bốc bảng)
+        const { groupA, groupB } = body;
         // groupA and groupB are arrays of team IDs (3 each)
 
         if (!Array.isArray(groupA) || !Array.isArray(groupB) || groupA.length !== 3 || groupB.length !== 3) {
-            return NextResponse.json({ error: "Phải chọn đúng 3 đội cho mỗi bảng" }, { status: 400 });
+            return NextResponse.json({ error: "Phải chọn đúng 3 đội cho mỗi bảng hoặc danh sách gán bảng đấu" }, { status: 400 });
         }
 
         // Get Round IDs

@@ -9,7 +9,7 @@ export default function UserLayout({
   return (
     <>
       <Navbar />
-      <main className="relative flex-1 flex flex-col w-full bg-transparent mt-20">
+      <main className="relative flex-1 flex flex-col w-full bg-transparent mt-16 md:mt-20">
         <div className="flex-1">
           {children}
         </div>

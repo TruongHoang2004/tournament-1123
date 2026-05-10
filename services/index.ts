@@ -4,3 +4,4 @@ export * from "./team.service";
 export * from "./match.service";
 export * from "./player.service";
 export * from "./double.service";
+export * from "./tournament.service";

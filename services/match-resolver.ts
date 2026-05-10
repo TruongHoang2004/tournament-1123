@@ -1,6 +1,14 @@
 import prisma from "@/lib/prisma";
 
-export async function endGroupStage(categoryId: string) {
+export async function endGroupStage(
+    categoryId: string,
+    overrides?: {
+        groupA1?: string;
+        groupA2?: string;
+        groupB1?: string;
+        groupB2?: string;
+    }
+) {
     // 1. Fetch standings (we can fetch it internally or via API, but let's calculate directly here to be safe)
     const host = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const res = await fetch(`${host}/api/standings?categoryId=${categoryId}`);
@@ -11,10 +19,14 @@ export async function endGroupStage(categoryId: string) {
         throw new Error("Not enough teams to proceed to Semi-finals");
     }
 
-    const a1 = groupA[0].doubleId;
-    const a2 = groupA[1].doubleId;
-    const b1 = groupB[0].doubleId;
-    const b2 = groupB[1].doubleId;
+    const a1 = overrides?.groupA1 || groupA[0]?.doubleId;
+    const a2 = overrides?.groupA2 || groupA[1]?.doubleId;
+    const b1 = overrides?.groupB1 || groupB[0]?.doubleId;
+    const b2 = overrides?.groupB2 || groupB[1]?.doubleId;
+
+    if (!a1 || !a2 || !b1 || !b2) {
+        throw new Error("Không thể xác định danh sách các cặp đấu cho vòng Bán kết");
+    }
 
     // 2. Find the Semi-final TimelineMatches
     const semiRound = await prisma.round.findUnique({ where: { name: "SEMI" } });

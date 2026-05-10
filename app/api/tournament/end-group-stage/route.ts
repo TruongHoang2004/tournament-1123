@@ -9,13 +9,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const { categoryId } = await request.json();
+        const { categoryId, overrides } = await request.json();
 
         if (!categoryId) {
             return NextResponse.json({ error: "Missing categoryId" }, { status: 400 });
         }
 
-        const result = await endGroupStage(categoryId);
+        const result = await endGroupStage(categoryId, overrides);
         
         return NextResponse.json(result);
 

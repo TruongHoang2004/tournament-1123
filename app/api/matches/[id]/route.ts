@@ -55,6 +55,17 @@ export async function PATCH(
 
     // 2. Chốt kết quả trận đấu (Finalize)
     if (body.action === "finalize") {
+      // 2.1 Tự động lưu điểm số nếu có truyền kèm theo trong payload
+      if (body.scores && Array.isArray(body.scores)) {
+        for (const s of body.scores) {
+          await prisma.setScore.upsert({
+            where: { matchId_setNumber: { matchId: id, setNumber: s.setNumber } },
+            update: { scoreA: s.scoreA, scoreB: s.scoreB },
+            create: { matchId: id, setNumber: s.setNumber, scoreA: s.scoreA, scoreB: s.scoreB },
+          });
+        }
+      }
+
       const match = await prisma.match.findUnique({
         where: { id },
         include: {
@@ -66,6 +77,12 @@ export async function PATCH(
       });
 
       if (!match) return NextResponse.json({ error: "Match not found" }, { status: 404 });
+
+      // 2.2 Kiểm tra tính hợp lệ: Phải có điểm số khác 0 mới được chốt kết quả
+      const hasValidScores = match.setScores.some(s => s.scoreA > 0 || s.scoreB > 0);
+      if (!hasValidScores) {
+        return NextResponse.json({ error: "Trận đấu chưa có tỉ số hợp lệ. Vui lòng ghi điểm trước khi chốt kết quả." }, { status: 400 });
+      }
 
       // Tính toán người thắng
       let setsWonA = 0;
