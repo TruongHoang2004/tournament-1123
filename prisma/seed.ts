@@ -165,33 +165,14 @@ async function main() {
         const femaleL1 = females.find(p => p.level === 1);
         const femaleL2 = females.find(p => p.level === 2);
 
-        // 1. Tạo Đôi Nam Nữ Nâng Cao: VĐV Nam (trình 1/2) + VĐV Nữ (trình 1)
-        // Dùng: maleL2 + femaleL1
-        if (maleL2 && femaleL1) {
-            const cat = categories.find(c => c.code === CategoryCode.MIXED_ADVANCED);
+        // 1. Tạo Đôi Nữ: 2 nữ của đội
+        // Dùng: femaleL1 + femaleL2
+        if (femaleL1 && femaleL2) {
+            const cat = categories.find(c => c.code === CategoryCode.WOMEN_DOUBLE);
             if (cat) {
                 await prisma.double.create({
                     data: {
-                        player1Id: maleL2.id,
-                        player2Id: femaleL1.id,
-                        teamId: team.id,
-                        categoryId: cat.id,
-                        group: groupName,
-                        point: 0
-                    }
-                });
-                console.log(`   🏆 Seeded Đôi Nam Nữ Nâng Cao: ${maleL2.name} & ${femaleL1.name} (${team.name} -> Bảng ${groupName})`);
-            }
-        }
-
-        // 2. Tạo Đôi Nam Nữ Trung Cấp: VĐV Nam (trình 3/4/5) + VĐV Nữ (trình 2)
-        // Dùng: maleL4 + femaleL2
-        if (maleL4 && femaleL2) {
-            const cat = categories.find(c => c.code === CategoryCode.MIXED_INTERMEDIATE);
-            if (cat) {
-                await prisma.double.create({
-                    data: {
-                        player1Id: maleL4.id,
+                        player1Id: femaleL1.id,
                         player2Id: femaleL2.id,
                         teamId: team.id,
                         categoryId: cat.id,
@@ -199,26 +180,45 @@ async function main() {
                         point: 0
                     }
                 });
-                console.log(`   🏆 Seeded Đôi Nam Nữ Trung Cấp: ${maleL4.name} & ${femaleL2.name} (${team.name} -> Bảng ${groupName})`);
+                console.log(`   🏆 Seeded Đôi Nữ: ${femaleL1.name} & ${femaleL2.name} (${team.name} -> Bảng ${groupName})`);
             }
         }
 
-        // 3. Tạo Đôi Nam Hỗn Hợp: VĐV Nam (trình 1/2) + VĐV Nam (trình 3/4)
-        // Dùng: maleL1 + maleL3
-        if (maleL1 && maleL3) {
-            const cat = categories.find(c => c.code === CategoryCode.MEN_MIXED);
+        // 2. Tạo Đôi Nam Trình Độ Nâng Cao: VĐV Nam (trình 1) + VĐV Nam (trình 2)
+        // Dùng: maleL1 + maleL2
+        if (maleL1 && maleL2) {
+            const cat = categories.find(c => c.code === CategoryCode.MEN_ADVANCED);
             if (cat) {
                 await prisma.double.create({
                     data: {
                         player1Id: maleL1.id,
-                        player2Id: maleL3.id,
+                        player2Id: maleL2.id,
                         teamId: team.id,
                         categoryId: cat.id,
                         group: groupName,
                         point: 0
                     }
                 });
-                console.log(`   🏆 Seeded Đôi Nam Hỗn Hợp: ${maleL1.name} & ${maleL3.name} (${team.name} -> Bảng ${groupName})`);
+                console.log(`   🏆 Seeded Đôi Nam Nâng Cao: ${maleL1.name} & ${maleL2.name} (${team.name} -> Bảng ${groupName})`);
+            }
+        }
+
+        // 3. Tạo Đôi Nam Trình Độ Trung Cấp: VĐV Nam (trình 3) + VĐV Nam (trình 4)
+        // Dùng: maleL3 + maleL4
+        if (maleL3 && maleL4) {
+            const cat = categories.find(c => c.code === CategoryCode.MEN_INTERMEDIATE);
+            if (cat) {
+                await prisma.double.create({
+                    data: {
+                        player1Id: maleL3.id,
+                        player2Id: maleL4.id,
+                        teamId: team.id,
+                        categoryId: cat.id,
+                        group: groupName,
+                        point: 0
+                    }
+                });
+                console.log(`   🏆 Seeded Đôi Nam Trung Cấp: ${maleL3.name} & ${maleL4.name} (${team.name} -> Bảng ${groupName})`);
             }
         }
     }
