@@ -59,8 +59,8 @@ export default function PlayerDetailPage({ params }: { params: Promise<{ id: str
     const isDoubleA = m.doubleA.player1.name === player.name || m.doubleA.player2.name === player.name;
     const isDoubleB = m.doubleB.player1.name === player.name || m.doubleB.player2.name === player.name;
 
-    const winnerIdMatchesDoubleA = m.winnerTeamId === m.doubleA.id;
-    const winnerIdMatchesDoubleB = m.winnerTeamId === m.doubleB.id;
+    const winnerIdMatchesDoubleA = m.winnerTeamId === m.doubleA.teamId;
+    const winnerIdMatchesDoubleB = m.winnerTeamId === m.doubleB.teamId;
     return (isDoubleA && winnerIdMatchesDoubleA) || (isDoubleB && winnerIdMatchesDoubleB);
   }).length;
 

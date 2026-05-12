@@ -78,6 +78,34 @@ export default function DoubleDetailPage({ params }: { params: Promise<{ id: str
         <div className="lg:col-span-1 space-y-6">
           <DoubleDetailCard double={double} />
 
+          {/* Thành viên bộ đôi */}
+          <div className="space-y-3">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block ml-1">
+              Thành viên bộ đôi
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <Link href={`/players/${double.player1.id}`} className="block glass p-4 hover:border-primary/40 transition-all text-center space-y-3 group cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-zinc-100 group-hover:bg-primary group-hover:text-white transition-all flex items-center justify-center text-sm font-black text-zinc-500 mx-auto">
+                  {double.player1.name.substring(0, 1)}
+                </div>
+                <div>
+                  <p className="text-xs font-black text-zinc-800 group-hover:text-primary transition-colors truncate">{double.player1.name}</p>
+                  <p className="text-[9px] text-zinc-400 font-bold uppercase mt-1">VĐV 1</p>
+                </div>
+              </Link>
+
+              <Link href={`/players/${double.player2.id}`} className="block glass p-4 hover:border-primary/40 transition-all text-center space-y-3 group cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-zinc-100 group-hover:bg-primary group-hover:text-white transition-all flex items-center justify-center text-sm font-black text-zinc-500 mx-auto">
+                  {double.player2.name.substring(0, 1)}
+                </div>
+                <div>
+                  <p className="text-xs font-black text-zinc-800 group-hover:text-primary transition-colors truncate">{double.player2.name}</p>
+                  <p className="text-[9px] text-zinc-400 font-bold uppercase mt-1">VĐV 2</p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
           <DoublePerformanceCard
             totalMatchesCount={totalMatchesCount}
             winsCount={winsCount}

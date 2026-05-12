@@ -7,11 +7,13 @@ export interface Double {
     name: string;
   };
   player1: {
+    id: string;
     name: string;
     gender: string;
     level: number;
   };
   player2: {
+    id: string;
     name: string;
     gender: string;
     level: number;
