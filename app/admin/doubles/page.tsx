@@ -6,19 +6,12 @@ import {
   LayoutDashboard
 } from "lucide-react";
 import Link from "next/link";
-import { AdminLogin } from "@/components/admin/AdminLogin";
 import { DoubleCreateForm } from "@/components/admin/DoubleCreateForm";
 import { DoubleList } from "@/components/admin/DoubleList";
 import { GroupAssignment } from "@/components/admin/GroupAssignment";
-
 export default function AdminDoublesPage() {
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-
-  if (!isAuthorized) {
-    return <AdminLogin onSuccess={() => setIsAuthorized(true)} />;
-  }
 
   return (
     <div className="min-h-screen p-4 md:p-8 text-foreground font-be-vietnam-pro">

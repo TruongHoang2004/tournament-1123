@@ -33,8 +33,12 @@ export default function AdminNavbar() {
     { name: "Doubles Management", href: "/admin/doubles", icon: Users },
     { name: "Group Assignment", href: "/admin/groups", icon: Shuffle },
     { name: "Match Management", href: "/admin/matches", icon: Calendar },
-    { name: "Tournament Settings", href: "/admin/settings", icon: Trophy },
   ];
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.href = "/";
+  };
 
   return (
     <nav
@@ -82,8 +86,8 @@ export default function AdminNavbar() {
             Public View
           </Link>
           <button
-            onClick={() => {/* TODO: Logout logic */}}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all text-xs font-bold"
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all text-xs font-bold cursor-pointer"
           >
             <LogOut size={14} />
             Logout
