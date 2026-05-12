@@ -1,5 +1,6 @@
 import { Loader2, Users } from "lucide-react";
 import { DoubleCard } from "./DoubleCard";
+import Link from "next/link";
 
 interface DoublesGridProps {
   doubles: any[];
@@ -28,7 +29,9 @@ export function DoublesGrid({ doubles, isLoading }: DoublesGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {doubles.map((double) => (
-        <DoubleCard key={double.id} double={double} />
+        <Link key={double.id} href={`/doubles/${double.id}`} className="block h-full cursor-pointer group">
+          <DoubleCard double={double} />
+        </Link>
       ))}
     </div>
   );

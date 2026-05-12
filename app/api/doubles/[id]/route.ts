@@ -2,6 +2,72 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 
+// GET /api/doubles/[id]
+export async function GET(
+    _request: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await params;
+        const double = await prisma.double.findUnique({
+            where: { id },
+            include: {
+                team: true,
+                player1: true,
+                player2: true,
+                category: true,
+            },
+        });
+
+        if (!double) {
+            return NextResponse.json({ error: "Không tìm thấy cặp đôi" }, { status: 404 });
+        }
+
+        // Lấy tất cả các trận đấu liên quan đến cặp đôi này
+        const matches = await prisma.match.findMany({
+            where: {
+                OR: [
+                    { doubleAId: id },
+                    { doubleBId: id },
+                ],
+            },
+            include: {
+                doubleA: {
+                    include: {
+                        team: true,
+                        player1: true,
+                        player2: true,
+                    },
+                },
+                doubleB: {
+                    include: {
+                        team: true,
+                        player1: true,
+                        player2: true,
+                    },
+                },
+                setScores: true,
+                timelineMatch: {
+                    include: {
+                        round: true,
+                        category: true,
+                    },
+                },
+            },
+            orderBy: {
+                timelineMatch: {
+                    order: "asc",
+                },
+            },
+        });
+
+        return NextResponse.json({ double, matches });
+    } catch (error) {
+        console.error("GET /api/doubles/[id] error:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
+}
+
 // DELETE /api/doubles/[id] — Xóa bộ đôi và tự động reset lịch đấu/kết quả của nội dung liên quan
 export async function DELETE(
     request: NextRequest,

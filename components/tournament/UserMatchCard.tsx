@@ -120,9 +120,9 @@ export default function UserMatchCard({ order, roundName, categoryName, match }:
         </div>
 
         {/* Category Info */}
-        <div className="hidden lg:flex flex-col items-end justify-center w-36 border-l border-slate-100 pl-6">
+        <div className="hidden lg:flex flex-col items-end justify-center w-52 border-l border-slate-100 pl-6 text-right">
           <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Hạng mục</span>
-          <span className="text-xs font-black text-slate-600 truncate max-w-full mt-0.5">{categoryName}</span>
+          <span className="text-xs font-black text-slate-600 mt-0.5 whitespace-normal break-words">{categoryName}</span>
         </div>
       </div>
 
