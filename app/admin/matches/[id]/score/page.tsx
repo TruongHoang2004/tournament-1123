@@ -120,6 +120,8 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [tempScores, setTempScores] = useState<Record<number, { scoreA: number; scoreB: number }>>({});
+  const [selectedWinnerId, setSelectedWinnerId] = useState<string>("");
+  const [isManualWinner, setIsManualWinner] = useState(false);
 
   useEffect(() => {
     fetchMatch();
@@ -134,10 +136,19 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
 
       // Initialize tempScores from the fetched match's setScores
       const initial: Record<number, { scoreA: number; scoreB: number }> = {};
+      let setsWonA = 0;
+      let setsWonB = 0;
       data.setScores?.forEach((s: any) => {
         initial[s.setNumber] = { scoreA: s.scoreA, scoreB: s.scoreB };
+        if (s.scoreA > s.scoreB) setsWonA++;
+        else if (s.scoreB > s.scoreA) setsWonB++;
       });
       setTempScores(initial);
+
+      // Tự động chọn đề xuất nếu admin chưa chọn thủ công
+      if (!isManualWinner) {
+        setSelectedWinnerId(setsWonA >= setsWonB ? data.doubleA.teamId : data.doubleB.teamId);
+      }
     } catch (error) {
       toast.error("Không tìm thấy trận đấu");
       router.push("/admin/matches");
@@ -176,7 +187,8 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           action: "finalize",
-          scores: scoresPayload
+          scores: scoresPayload,
+          winnerTeamId: selectedWinnerId // Luôn gửi đội thắng do admin chỉ định
         }),
       });
 
@@ -312,12 +324,53 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
           </div>
         )}
 
+        {/* Quyết định đội thắng (Luôn hiển thị) */}
+        {isLive && match && (
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div className="space-y-1">
+              <h3 className="text-sm font-black uppercase tracking-wider text-slate-800">Quyết định đội chiến thắng</h3>
+              <p className="text-xs text-slate-400 font-medium">Hệ thống đề xuất dựa trên điểm số, nhưng bạn có toàn quyền thay đổi trước khi chốt kết quả.</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedWinnerId(match.doubleA.teamId);
+                  setIsManualWinner(true);
+                }}
+                className={`p-4 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
+                  selectedWinnerId === match.doubleA.teamId
+                    ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
+                    : "border-slate-200 hover:border-slate-300 text-slate-600"
+                }`}
+              >
+                {match.doubleA.team.name}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedWinnerId(match.doubleB.teamId);
+                  setIsManualWinner(true);
+                }}
+                className={`p-4 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
+                  selectedWinnerId === match.doubleB.teamId
+                    ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
+                    : "border-slate-200 hover:border-slate-300 text-slate-600"
+                }`}
+              >
+                {match.doubleB.team.name}
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Finalize Button */}
         {isLive && (
-          <div className="pt-6">
+          <div className="pt-2">
             <button 
               onClick={handleFinalize}
-              disabled={saving}
+              disabled={saving || !selectedWinnerId}
               className="w-full py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-emerald-100 transition-all active:scale-95 disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-6 h-6 animate-spin" /> : <Flag className="w-6 h-6" />}

@@ -84,7 +84,7 @@ export async function PATCH(
         return NextResponse.json({ error: "Trận đấu chưa có tỉ số hợp lệ. Vui lòng ghi điểm trước khi chốt kết quả." }, { status: 400 });
       }
 
-      // Tính toán người thắng
+      // Tính toán người thắng tự động từ điểm số
       let setsWonA = 0;
       let setsWonB = 0;
       match.setScores.forEach((s) => {
@@ -92,10 +92,23 @@ export async function PATCH(
         else if (s.scoreB > s.scoreA) setsWonB++;
       });
 
-      const winnerDoubleId = setsWonA > setsWonB ? match.doubleAId : match.doubleBId;
-      const loserDoubleId = setsWonA > setsWonB ? match.doubleBId : match.doubleAId;
-      const winnerDouble = setsWonA > setsWonB ? match.doubleA : match.doubleB;
-      const loserDouble = setsWonA > setsWonB ? match.doubleB : match.doubleA;
+      // Cho phép ghi nhận đội thắng thủ công (Ví dụ: đối thủ bỏ cuộc / chấn thương)
+      let winnerDoubleId = setsWonA > setsWonB ? match.doubleAId : match.doubleBId;
+      if (body.winnerTeamId) {
+        if (body.winnerTeamId === match.doubleA.teamId) {
+          winnerDoubleId = match.doubleAId;
+        } else if (body.winnerTeamId === match.doubleB.teamId) {
+          winnerDoubleId = match.doubleBId;
+        }
+      } else if (body.winnerDoubleId) {
+        if (body.winnerDoubleId === match.doubleAId || body.winnerDoubleId === match.doubleBId) {
+          winnerDoubleId = body.winnerDoubleId;
+        }
+      }
+
+      const loserDoubleId = winnerDoubleId === match.doubleAId ? match.doubleBId : match.doubleAId;
+      const winnerDouble = winnerDoubleId === match.doubleAId ? match.doubleA : match.doubleB;
+      const loserDouble = winnerDoubleId === match.doubleAId ? match.doubleB : match.doubleA;
       const round = match.timelineMatch.round;
 
       // Transaction chốt kết quả

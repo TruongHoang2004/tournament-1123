@@ -57,6 +57,9 @@ export default function UserMatchCard({ order, roundName, categoryName, match }:
   const isWinnerA = match.winnerTeamId === match.doubleA.teamId;
   const isWinnerB = match.winnerTeamId === match.doubleB.teamId;
 
+  const showForfeitA = !!match.winnerTeamId && isWinnerB && sA > sB;
+  const showForfeitB = !!match.winnerTeamId && isWinnerA && sB > sA;
+
   return (
     <div className="group relative bg-white rounded-3xl border border-slate-200 p-5 md:p-6 hover:shadow-xl hover:shadow-slate-100 hover:border-primary/20 transition-all duration-300">
       <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
@@ -76,9 +79,16 @@ export default function UserMatchCard({ order, roundName, categoryName, match }:
         <div className="flex-1 flex items-center justify-between gap-4 w-full">
           {/* Team A */}
           <div className="flex-1 flex flex-col items-end gap-1 text-right min-w-0">
-            <span className={`text-sm font-black text-slate-900 truncate w-full ${isWinnerA ? "text-primary" : ""}`}>
-              {match.doubleA.team.name}
-            </span>
+            <div className="flex items-center gap-1.5 justify-end w-full">
+              {showForfeitA && (
+                <span className="shrink-0 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-red-50 text-red-500 border border-red-100/30">
+                  Bỏ cuộc / Chấn thương
+                </span>
+              )}
+              <span className={`text-sm font-black text-slate-900 truncate ${isWinnerA ? "text-primary" : ""}`}>
+                {match.doubleA.team.name}
+              </span>
+            </div>
             <span className="text-[10px] text-slate-400 font-bold uppercase truncate w-full">
               {match.doubleA.player1.name} & {match.doubleA.player2.name}
             </span>
@@ -93,9 +103,16 @@ export default function UserMatchCard({ order, roundName, categoryName, match }:
 
           {/* Team B */}
           <div className="flex-1 flex flex-col items-start gap-1 text-left min-w-0">
-            <span className={`text-sm font-black text-slate-900 truncate w-full ${isWinnerB ? "text-primary" : ""}`}>
-              {match.doubleB.team.name}
-            </span>
+            <div className="flex items-center gap-1.5 justify-start w-full">
+              <span className={`text-sm font-black text-slate-900 truncate ${isWinnerB ? "text-primary" : ""}`}>
+                {match.doubleB.team.name}
+              </span>
+              {showForfeitB && (
+                <span className="shrink-0 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-red-50 text-red-500 border border-red-100/30">
+                  Bỏ cuộc / Chấn thương
+                </span>
+              )}
+            </div>
             <span className="text-[10px] text-slate-400 font-bold uppercase truncate w-full">
               {match.doubleB.player1.name} & {match.doubleB.player2.name}
             </span>

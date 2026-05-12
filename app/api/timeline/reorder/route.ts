@@ -39,15 +39,19 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "No match to swap with" }, { status: 400 });
         }
 
-        // Swap orders in a transaction
+        // Swap orders in a transaction using a temporary negative order to prevent unique constraint violation
         await prisma.$transaction([
             prisma.timelineMatch.update({
                 where: { id: currentTM.id },
-                data: { order: targetOrder }
+                data: { order: -currentTM.order - 1000 }
             }),
             prisma.timelineMatch.update({
                 where: { id: targetTM.id },
                 data: { order: currentTM.order }
+            }),
+            prisma.timelineMatch.update({
+                where: { id: currentTM.id },
+                data: { order: targetOrder }
             })
         ]);
 
