@@ -2,6 +2,33 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { MatchResult } from "@prisma/client";
 
+function validateBadmintonScore(scoreA: number, scoreB: number): { isValid: boolean; error?: string } {
+  if (scoreA < 0 || scoreB < 0) {
+    return { isValid: false, error: "Điểm số không được là số âm." };
+  }
+  const maxScore = Math.max(scoreA, scoreB);
+  const minScore = Math.min(scoreA, scoreB);
+  const diff = maxScore - minScore;
+
+  if (maxScore > 30) {
+    return { isValid: false, error: "Điểm số tối đa của một set đấu không được vượt quá 30." };
+  }
+
+  if (maxScore < 21) {
+    return { isValid: false, error: "Điểm số của đội thắng phải đạt tối thiểu 21 điểm (hoặc đánh dấu bỏ cuộc nếu có đội chấn thương)." };
+  }
+
+  if (maxScore < 30 && diff < 2) {
+    return { isValid: false, error: "Tỉ số thắng phải có cách biệt tối thiểu 2 điểm (ví dụ: 21-19, 22-20). Vui lòng điều chỉnh lại điểm hoặc đánh dấu bỏ cuộc." };
+  }
+
+  if (maxScore === 30 && diff < 1) {
+    return { isValid: false, error: "Tỉ số không hợp lệ." };
+  }
+
+  return { isValid: true };
+}
+
 // GET /api/matches/[id]
 export async function GET(
   _request: Request,
@@ -82,6 +109,19 @@ export async function PATCH(
       const hasValidScores = match.setScores.some(s => s.scoreA > 0 || s.scoreB > 0);
       if (!hasValidScores) {
         return NextResponse.json({ error: "Trận đấu chưa có tỉ số hợp lệ. Vui lòng ghi điểm trước khi chốt kết quả." }, { status: 400 });
+      }
+
+      // Kiểm tra luật điểm số cầu lông chặt chẽ (nếu không phải trường hợp bỏ cuộc)
+      const isForfeit = !!body.isForfeit;
+      if (!isForfeit) {
+        const set1 = match.setScores.find(s => s.setNumber === 1);
+        if (!set1) {
+          return NextResponse.json({ error: "Trận đấu chưa có tỉ số set 1." }, { status: 400 });
+        }
+        const validation = validateBadmintonScore(set1.scoreA, set1.scoreB);
+        if (!validation.isValid) {
+          return NextResponse.json({ error: validation.error }, { status: 400 });
+        }
       }
 
       // Tính toán người thắng tự động từ điểm số

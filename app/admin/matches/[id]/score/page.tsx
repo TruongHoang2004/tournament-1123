@@ -9,6 +9,33 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+function validateBadmintonScore(scoreA: number, scoreB: number): { isValid: boolean; error?: string } {
+  if (scoreA < 0 || scoreB < 0) {
+    return { isValid: false, error: "Điểm số không được là số âm." };
+  }
+  const maxScore = Math.max(scoreA, scoreB);
+  const minScore = Math.min(scoreA, scoreB);
+  const diff = maxScore - minScore;
+
+  if (maxScore > 30) {
+    return { isValid: false, error: "Điểm số tối đa của một set đấu không được vượt quá 30." };
+  }
+
+  if (maxScore < 21) {
+    return { isValid: false, error: "Điểm số của đội thắng phải đạt tối thiểu 21 điểm (hoặc chọn 'Thắng do đối thủ bỏ cuộc' nếu có đội chấn thương)." };
+  }
+
+  if (maxScore < 30 && diff < 2) {
+    return { isValid: false, error: "Đội thắng phải cách biệt tối thiểu 2 điểm (ví dụ: 21-19, 22-20). Nếu không đạt, vui lòng chọn 'Thắng do đối thủ bỏ cuộc'." };
+  }
+
+  if (maxScore === 30 && diff < 1) {
+    return { isValid: false, error: "Tỷ số không hợp lệ." };
+  }
+
+  return { isValid: true };
+}
+
 interface SetScore {
   setNumber: number;
   scoreA: number;
@@ -121,11 +148,19 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
   const [saving, setSaving] = useState(false);
   const [tempScores, setTempScores] = useState<Record<number, { scoreA: number; scoreB: number }>>({});
   const [selectedWinnerId, setSelectedWinnerId] = useState<string>("");
-  const [isManualWinner, setIsManualWinner] = useState(false);
+  const [isForfeit, setIsForfeit] = useState(false);
 
   useEffect(() => {
     fetchMatch();
   }, [id]);
+
+  useEffect(() => {
+    if (!isForfeit && match) {
+      const scoreA = tempScores[1]?.scoreA ?? 0;
+      const scoreB = tempScores[1]?.scoreB ?? 0;
+      setSelectedWinnerId(scoreA >= scoreB ? match.doubleA.teamId : match.doubleB.teamId);
+    }
+  }, [tempScores, isForfeit, match]);
 
   const fetchMatch = async () => {
     try {
@@ -146,7 +181,7 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
       setTempScores(initial);
 
       // Tự động chọn đề xuất nếu admin chưa chọn thủ công
-      if (!isManualWinner) {
+      if (!isForfeit) {
         setSelectedWinnerId(setsWonA >= setsWonB ? data.doubleA.teamId : data.doubleB.teamId);
       }
     } catch (error) {
@@ -173,6 +208,17 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
   };
 
   const handleFinalize = async () => {
+    // Nếu không phải trường hợp bỏ cuộc, tiến hành validate điểm số cầu lông
+    if (!isForfeit) {
+      const scoreA = tempScores[1]?.scoreA ?? 0;
+      const scoreB = tempScores[1]?.scoreB ?? 0;
+      const validation = validateBadmintonScore(scoreA, scoreB);
+      if (!validation.isValid) {
+        toast.error(validation.error);
+        return;
+      }
+    }
+
     if (!confirm("Xác nhận kết thúc trận đấu và chốt kết quả?")) return;
     setSaving(true);
     try {
@@ -188,7 +234,8 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
         body: JSON.stringify({ 
           action: "finalize",
           scores: scoresPayload,
-          winnerTeamId: selectedWinnerId // Luôn gửi đội thắng do admin chỉ định
+          winnerTeamId: selectedWinnerId,
+          isForfeit: isForfeit // Gửi trạng thái bỏ cuộc lên server
         }),
       });
 
@@ -324,44 +371,60 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
           </div>
         )}
 
-        {/* Quyết định đội thắng (Luôn hiển thị) */}
+        {/* Quyết định đội thắng (Kiểm soát chặt chẽ theo luật điểm cầu lông) */}
         {isLive && match && (
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-            <div className="space-y-1">
-              <h3 className="text-sm font-black uppercase tracking-wider text-slate-800">Quyết định đội chiến thắng</h3>
-              <p className="text-xs text-slate-400 font-medium">Hệ thống đề xuất dựa trên điểm số, nhưng bạn có toàn quyền thay đổi trước khi chốt kết quả.</p>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedWinnerId(match.doubleA.teamId);
-                  setIsManualWinner(true);
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="isForfeitCheckbox"
+                checked={isForfeit}
+                onChange={(e) => {
+                  setIsForfeit(e.target.checked);
                 }}
-                className={`p-4 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
-                  selectedWinnerId === match.doubleA.teamId
-                    ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
-                    : "border-slate-200 hover:border-slate-300 text-slate-600"
-                }`}
-              >
-                {match.doubleA.team.name}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedWinnerId(match.doubleB.teamId);
-                  setIsManualWinner(true);
-                }}
-                className={`p-4 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
-                  selectedWinnerId === match.doubleB.teamId
-                    ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
-                    : "border-slate-200 hover:border-slate-300 text-slate-600"
-                }`}
-              >
-                {match.doubleB.team.name}
-              </button>
+                className="w-4 h-4 text-emerald-600 bg-white border-slate-300 rounded focus:ring-emerald-500 cursor-pointer"
+              />
+              <label htmlFor="isForfeitCheckbox" className="text-xs font-black text-slate-700 select-none cursor-pointer flex items-center gap-1.5">
+                Đặc biệt: Thắng do đối thủ bỏ cuộc (Chấn thương / Đầu hàng)
+              </label>
             </div>
+
+            {isForfeit ? (
+              <div className="space-y-3 pt-2 border-t border-slate-100">
+                <p className="text-xs font-bold text-slate-500">Chọn đội chiến thắng chung cuộc do đối thủ bỏ cuộc:</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedWinnerId(match.doubleA.teamId)}
+                    className={`p-4 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
+                      selectedWinnerId === match.doubleA.teamId
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
+                        : "border-slate-200 hover:border-slate-300 text-slate-600"
+                    }`}
+                  >
+                    {match.doubleA.team.name}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedWinnerId(match.doubleB.teamId)}
+                    className={`p-4 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
+                      selectedWinnerId === match.doubleB.teamId
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
+                        : "border-slate-200 hover:border-slate-300 text-slate-600"
+                    }`}
+                  >
+                    {match.doubleB.team.name}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-500">Đội chiến thắng đề xuất (theo tỉ số):</span>
+                <span className="font-black text-emerald-600 uppercase tracking-wider">
+                  {selectedWinnerId === match.doubleA.teamId ? match.doubleA.team.name : match.doubleB.team.name}
+                </span>
+              </div>
+            )}
           </div>
         )}
 
