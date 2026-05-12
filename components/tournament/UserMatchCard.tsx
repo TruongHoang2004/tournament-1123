@@ -86,11 +86,11 @@ export default function UserMatchCard({ order, roundName, categoryName, match }:
                 </span>
               )}
               <span className={`text-sm font-black text-slate-900 truncate ${isWinnerA ? "text-primary" : ""}`}>
-                {match.doubleA.team.name}
+                {match.doubleA.player1.name} & {match.doubleA.player2.name}
               </span>
             </div>
             <span className="text-[10px] text-slate-400 font-bold uppercase truncate w-full">
-              {match.doubleA.player1.name} & {match.doubleA.player2.name}
+              Đội {match.doubleA.team.name}
             </span>
           </div>
 
@@ -105,7 +105,7 @@ export default function UserMatchCard({ order, roundName, categoryName, match }:
           <div className="flex-1 flex flex-col items-start gap-1 text-left min-w-0">
             <div className="flex items-center gap-1.5 justify-start w-full">
               <span className={`text-sm font-black text-slate-900 truncate ${isWinnerB ? "text-primary" : ""}`}>
-                {match.doubleB.team.name}
+                {match.doubleB.player1.name} & {match.doubleB.player2.name}
               </span>
               {showForfeitB && (
                 <span className="shrink-0 px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-red-50 text-red-500 border border-red-100/30">
@@ -114,7 +114,7 @@ export default function UserMatchCard({ order, roundName, categoryName, match }:
               )}
             </div>
             <span className="text-[10px] text-slate-400 font-bold uppercase truncate w-full">
-              {match.doubleB.player1.name} & {match.doubleB.player2.name}
+              Đội {match.doubleB.team.name}
             </span>
           </div>
         </div>

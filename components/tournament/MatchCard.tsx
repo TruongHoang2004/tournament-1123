@@ -26,8 +26,8 @@ export default function MatchCard({ match, updating, onUpdateScore, onFinalize }
               size="lg" 
               className={`mx-auto mb-4 ${match.winnerTeamId === match.doubleA.teamId ? 'ring-2 ring-blue-500 shadow-lg shadow-blue-500/20' : 'opacity-50'}`} 
             />
-            <p className="font-bold text-white truncate">{match.doubleA.team.name}</p>
-            <p className="text-[10px] text-gray-500 mt-1">{match.doubleA.player1.name} & {match.doubleA.player2.name}</p>
+            <p className="font-bold text-white truncate">{match.doubleA.player1.name} & {match.doubleA.player2.name}</p>
+            <p className="text-[10px] text-gray-500 mt-1">Đội {match.doubleA.team.name}</p>
           </div>
 
           <div className="flex flex-col items-center">
@@ -46,8 +46,8 @@ export default function MatchCard({ match, updating, onUpdateScore, onFinalize }
               size="lg" 
               className={`mx-auto mb-4 ${match.winnerTeamId === match.doubleB.teamId ? 'ring-2 ring-blue-500 shadow-lg shadow-blue-500/20' : 'opacity-50'}`} 
             />
-            <p className="font-bold text-white truncate">{match.doubleB.team.name}</p>
-            <p className="text-[10px] text-gray-500 mt-1">{match.doubleB.player1.name} & {match.doubleB.player2.name}</p>
+            <p className="font-bold text-white truncate">{match.doubleB.player1.name} & {match.doubleB.player2.name}</p>
+            <p className="text-[10px] text-gray-500 mt-1">Đội {match.doubleB.team.name}</p>
           </div>
         </div>
 

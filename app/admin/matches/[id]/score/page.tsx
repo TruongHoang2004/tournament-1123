@@ -319,9 +319,11 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
           <div className={`bg-white p-6 rounded-3xl border-2 transition-all ${match.winnerTeamId === match.doubleA.teamId ? "border-emerald-500 shadow-lg shadow-emerald-100" : "border-transparent shadow-sm"}`}>
             <div className="text-center space-y-2">
               <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto font-black text-xl">A</div>
-              <div className="font-black text-slate-800 text-lg leading-tight">{match.doubleA.team.name}</div>
+              <div className="font-black text-slate-800 text-lg leading-tight">
+                {match.doubleA.player1.name} & {match.doubleA.player2.name}
+              </div>
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                {match.doubleA.player1.name} <br/> {match.doubleA.player2.name}
+                Đội {match.doubleA.team.name}
               </div>
             </div>
           </div>
@@ -329,9 +331,11 @@ export default function MatchScoringPage({ params }: { params: Promise<{ id: str
           <div className={`bg-white p-6 rounded-3xl border-2 transition-all ${match.winnerTeamId === match.doubleB.teamId ? "border-emerald-500 shadow-lg shadow-emerald-100" : "border-transparent shadow-sm"}`}>
             <div className="text-center space-y-2">
               <div className="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto font-black text-xl">B</div>
-              <div className="font-black text-slate-800 text-lg leading-tight">{match.doubleB.team.name}</div>
+              <div className="font-black text-slate-800 text-lg leading-tight">
+                {match.doubleB.player1.name} & {match.doubleB.player2.name}
+              </div>
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                {match.doubleB.player1.name} <br/> {match.doubleB.player2.name}
+                Đội {match.doubleB.team.name}
               </div>
             </div>
           </div>

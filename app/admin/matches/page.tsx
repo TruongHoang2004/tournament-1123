@@ -259,13 +259,13 @@ export default function AdminMatchesPage() {
                         {match ? (
                           <div className="flex items-center gap-3">
                             <div className="flex flex-col">
-                              <span className="text-sm font-bold text-slate-800">{match.doubleA.team.name}</span>
-                              <span className="text-[10px] text-slate-400 uppercase font-medium">{match.doubleA.player1.name}</span>
+                              <span className="text-sm font-bold text-slate-800">{match.doubleA.player1.name} & {match.doubleA.player2.name}</span>
+                              <span className="text-[10px] text-slate-400 font-medium">Đội {match.doubleA.team.name}</span>
                             </div>
                             <span className="text-xs font-black text-slate-300">VS</span>
                             <div className="flex flex-col">
-                              <span className="text-sm font-bold text-slate-800">{match.doubleB.team.name}</span>
-                              <span className="text-[10px] text-slate-400 uppercase font-medium">{match.doubleB.player1.name}</span>
+                              <span className="text-sm font-bold text-slate-800">{match.doubleB.player1.name} & {match.doubleB.player2.name}</span>
+                              <span className="text-[10px] text-slate-400 font-medium">Đội {match.doubleB.team.name}</span>
                             </div>
                           </div>
                         ) : (
@@ -351,16 +351,16 @@ export default function AdminMatchesPage() {
                     {match ? (
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-black text-slate-800 truncate">{match.doubleA.team.name}</p>
+                          <p className="text-sm font-black text-slate-800 truncate">{match.doubleA.player1.name} & {match.doubleA.player2.name}</p>
                           <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                            {match.doubleA.player1.name} & {match.doubleA.player2.name}
+                            Đội {match.doubleA.team.name}
                           </p>
                         </div>
                         <span className="text-[10px] font-black text-slate-300 shrink-0 px-2 italic">VS</span>
                         <div className="flex-1 min-w-0 text-right">
-                          <p className="text-sm font-black text-slate-800 truncate">{match.doubleB.team.name}</p>
+                          <p className="text-sm font-black text-slate-800 truncate">{match.doubleB.player1.name} & {match.doubleB.player2.name}</p>
                           <p className="text-[10px] text-slate-400 truncate mt-0.5">
-                            {match.doubleB.player1.name} & {match.doubleB.player2.name}
+                            Đội {match.doubleB.team.name}
                           </p>
                         </div>
                       </div>

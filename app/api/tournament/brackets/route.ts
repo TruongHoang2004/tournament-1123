@@ -65,8 +65,8 @@ export async function GET(request: NextRequest) {
             return {
                 id: runtimeMatch.id,
                 status: runtimeMatch.winnerTeamId ? "FINISHED" : "LIVE",
-                team1: runtimeMatch.doubleA.team.name + " (" + runtimeMatch.doubleA.player1.name + ")",
-                team2: runtimeMatch.doubleB.team.name + " (" + runtimeMatch.doubleB.player1.name + ")",
+                team1: `${runtimeMatch.doubleA.player1.name} & ${runtimeMatch.doubleA.player2.name} (${runtimeMatch.doubleA.team.name})`,
+                team2: `${runtimeMatch.doubleB.player1.name} & ${runtimeMatch.doubleB.player2.name} (${runtimeMatch.doubleB.team.name})`,
                 score1,
                 score2,
                 winnerTeamId: runtimeMatch.winnerTeamId,
