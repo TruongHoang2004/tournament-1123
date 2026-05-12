@@ -50,5 +50,8 @@
       "@prisma/engines",
       "esbuild"
     ]
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

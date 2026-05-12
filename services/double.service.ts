@@ -19,6 +19,11 @@ export const doubleService = {
     const res = await api.post("/doubles", data);
     return res.data;
   },
+
+  delete: async (id: string) => {
+    const res = await api.delete(`/doubles/${id}`);
+    return res.data;
+  },
 };
 
 export const doubleKeys = {
@@ -37,6 +42,16 @@ export function useCreateDouble() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: CreateDoubleInput) => doubleService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: doubleKeys.all });
+    },
+  });
+}
+
+export function useDeleteDouble() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => doubleService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: doubleKeys.all });
     },

@@ -75,71 +75,71 @@ async function main() {
             name: "Team A",
             players: [
                 { name: "Toàn (Út)", gender: Gender.MALE, level: 1 },
-                { name: "Nga KM", gender: Gender.FEMALE, level: 2 },
-                { name: "Hoa", gender: Gender.FEMALE, level: 1 },
                 { name: "Tùng", gender: Gender.MALE, level: 2 },
                 { name: "Long E", gender: Gender.MALE, level: 3 },
                 { name: "Đạt", gender: Gender.MALE, level: 4 },
+                { name: "Nga KM", gender: Gender.FEMALE, level: 2 },
+                { name: "Hoa", gender: Gender.FEMALE, level: 1 },
             ],
         },
         {
             name: "Team B",
             players: [
                 { name: "Kiên", gender: Gender.MALE, level: 1 },
-                { name: "Nhiệm", gender: Gender.MALE, level: 2 },
-                { name: "Phượng", gender: Gender.FEMALE, level: 1 },
                 { name: "Tuấn", gender: Gender.MALE, level: 2 },
                 { name: "Trường", gender: Gender.MALE, level: 3 },
                 { name: "Hợp", gender: Gender.MALE, level: 4 },
+                { name: "Nhiệm", gender: Gender.FEMALE, level: 2 },
+                { name: "Phượng", gender: Gender.FEMALE, level: 1 },
             ],
         },
         {
             name: "Team C",
             players: [
                 { name: "Luân", gender: Gender.MALE, level: 1 },
-                { name: "Hường KM", gender: Gender.FEMALE, level: 2 },
-                { name: "Hường", gender: Gender.FEMALE, level: 1 },
                 { name: "Toàn (Bé)", gender: Gender.MALE, level: 2 },
                 { name: "Minh (HP)", gender: Gender.MALE, level: 3 },
                 { name: "Long (Tóc đỏ)", gender: Gender.MALE, level: 4 },
+                { name: "Hường KM", gender: Gender.FEMALE, level: 2 },
+                { name: "Hường", gender: Gender.FEMALE, level: 1 },
             ],
         },
         {
             name: "Team D",
             players: [
                 { name: "Hà KM", gender: Gender.MALE, level: 1 },
-                { name: "Chi", gender: Gender.FEMALE, level: 2 },
-                { name: "An", gender: Gender.MALE, level: 1 },
                 { name: "Mạnh KM", gender: Gender.MALE, level: 2 },
-                { name: "Hiền", gender: Gender.FEMALE, level: 3 },
+                { name: "Hiền", gender: Gender.MALE, level: 3 },
                 { name: "Tiến (Lớn)", gender: Gender.MALE, level: 4 },
+                { name: "Chi", gender: Gender.FEMALE, level: 2 },
+                { name: "An", gender: Gender.FEMALE, level: 1 },
             ],
         },
         {
             name: "Team E",
             players: [
                 { name: "Đức", gender: Gender.MALE, level: 1 },
-                { name: "Trang", gender: Gender.FEMALE, level: 2 },
-                { name: "Mai KM", gender: Gender.FEMALE, level: 1 },
                 { name: "Tiến (Em)", gender: Gender.MALE, level: 2 },
                 { name: "Sơn", gender: Gender.MALE, level: 3 },
                 { name: "Bình", gender: Gender.MALE, level: 4 },
+                { name: "Trang", gender: Gender.FEMALE, level: 2 },
+                { name: "Mai KM", gender: Gender.FEMALE, level: 1 },
             ],
         },
         {
             name: "Team F",
             players: [
                 { name: "Thường", gender: Gender.MALE, level: 1 },
+                { name: "Huy", gender: Gender.MALE, level: 2 },
+                { name: "Toàn (Lớn)", gender: Gender.MALE, level: 3 },
+                { name: "Khánh", gender: Gender.MALE, level: 4 },
                 { name: "Yến", gender: Gender.FEMALE, level: 2 },
                 { name: "Thúy", gender: Gender.FEMALE, level: 1 },
-                { name: "Huy", gender: Gender.MALE, level: 2 },
-                { name: "Linh", gender: Gender.FEMALE, level: 3 },
-                { name: "Toàn (Lớn)", gender: Gender.MALE, level: 4 },
             ],
         },
     ];
 
-    // ─── Create Teams & Players ───────────────────────────────────────
+    // ─── Create Teams, Players & Seed Doubles ─────────────────────────
     for (const teamData of teamsData) {
         const team = await prisma.team.create({
             data: {
@@ -149,8 +149,78 @@ async function main() {
             include: { players: true },
         });
         console.log(
-            `✅ Created ${team.name} with ${team.players.length} players: ${team.players.map((p) => p.name).join(", ")}`
+            `✅ Created ${team.name} with ${team.players.length} players`
         );
+
+        const groupName = team.name === "Team A" || team.name === "Team C" || team.name === "Team E" ? "A" : "B";
+
+        const males = team.players.filter(p => p.gender === Gender.MALE);
+        const females = team.players.filter(p => p.gender === Gender.FEMALE);
+
+        const maleL1 = males.find(p => p.level === 1);
+        const maleL2 = males.find(p => p.level === 2);
+        const maleL3 = males.find(p => p.level === 3);
+        const maleL4 = males.find(p => p.level === 4);
+
+        const femaleL1 = females.find(p => p.level === 1);
+        const femaleL2 = females.find(p => p.level === 2);
+
+        // 1. Tạo Đôi Nam Nữ Nâng Cao: VĐV Nam (trình 1/2) + VĐV Nữ (trình 1)
+        // Dùng: maleL2 + femaleL1
+        if (maleL2 && femaleL1) {
+            const cat = categories.find(c => c.code === CategoryCode.MIXED_ADVANCED);
+            if (cat) {
+                await prisma.double.create({
+                    data: {
+                        player1Id: maleL2.id,
+                        player2Id: femaleL1.id,
+                        teamId: team.id,
+                        categoryId: cat.id,
+                        group: groupName,
+                        point: 0
+                    }
+                });
+                console.log(`   🏆 Seeded Đôi Nam Nữ Nâng Cao: ${maleL2.name} & ${femaleL1.name} (${team.name} -> Bảng ${groupName})`);
+            }
+        }
+
+        // 2. Tạo Đôi Nam Nữ Trung Cấp: VĐV Nam (trình 3/4/5) + VĐV Nữ (trình 2)
+        // Dùng: maleL4 + femaleL2
+        if (maleL4 && femaleL2) {
+            const cat = categories.find(c => c.code === CategoryCode.MIXED_INTERMEDIATE);
+            if (cat) {
+                await prisma.double.create({
+                    data: {
+                        player1Id: maleL4.id,
+                        player2Id: femaleL2.id,
+                        teamId: team.id,
+                        categoryId: cat.id,
+                        group: groupName,
+                        point: 0
+                    }
+                });
+                console.log(`   🏆 Seeded Đôi Nam Nữ Trung Cấp: ${maleL4.name} & ${femaleL2.name} (${team.name} -> Bảng ${groupName})`);
+            }
+        }
+
+        // 3. Tạo Đôi Nam Hỗn Hợp: VĐV Nam (trình 1/2) + VĐV Nam (trình 3/4)
+        // Dùng: maleL1 + maleL3
+        if (maleL1 && maleL3) {
+            const cat = categories.find(c => c.code === CategoryCode.MEN_MIXED);
+            if (cat) {
+                await prisma.double.create({
+                    data: {
+                        player1Id: maleL1.id,
+                        player2Id: maleL3.id,
+                        teamId: team.id,
+                        categoryId: cat.id,
+                        group: groupName,
+                        point: 0
+                    }
+                });
+                console.log(`   🏆 Seeded Đôi Nam Hỗn Hợp: ${maleL1.name} & ${maleL3.name} (${team.name} -> Bảng ${groupName})`);
+            }
+        }
     }
 
     // ─── Summary ──────────────────────────────────────────────────────

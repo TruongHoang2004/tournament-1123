@@ -1,7 +1,9 @@
 "use client";
 
-import { useDoubles } from "@/services";
-import { Users, Trophy, Loader2 } from "lucide-react";
+import { useDoubles, useDeleteDouble } from "@/services";
+import { Users, Trophy, Loader2, Trash2, AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface DoubleListProps {
   selectedTeamId?: string;
@@ -9,10 +11,16 @@ interface DoubleListProps {
 
 export function DoubleList({ selectedTeamId }: DoubleListProps) {
   const { data: doubles, isLoading: doublesLoading } = useDoubles();
+  const deleteDoubleMutation = useDeleteDouble();
+  const [doubleToDelete, setDoubleToDelete] = useState<any | null>(null);
 
   const filteredDoubles = selectedTeamId
     ? doubles?.filter((d: any) => d.teamId === selectedTeamId)
     : doubles;
+
+  const handleDeleteClick = (double: any) => {
+    setDoubleToDelete(double);
+  };
 
   return (
     <div className="lg:col-span-7 space-y-6">
@@ -46,7 +54,16 @@ export function DoubleList({ selectedTeamId }: DoubleListProps) {
                   </span>
                   <span className="text-[10px] font-bold text-zinc-400">Đội {double.team?.name}</span>
                 </div>
-                <Trophy className="w-4 h-4 text-zinc-300 group-hover:text-accent transition-colors" />
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleDeleteClick(double)}
+                    className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer md:opacity-0 md:group-hover:opacity-100"
+                    title="Xóa bộ đôi"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <Trophy className="w-4 h-4 text-zinc-300 group-hover:text-accent transition-colors shrink-0" />
+                </div>
               </div>
 
               <div className="flex items-center gap-4">
@@ -68,6 +85,63 @@ export function DoubleList({ selectedTeamId }: DoubleListProps) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Modal xác nhận xóa bộ đôi */}
+      {doubleToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl border border-zinc-100 max-w-md w-full overflow-hidden animate-in scale-in duration-200 p-6 space-y-6">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-red-50 text-red-600 rounded-full shrink-0">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="font-black text-lg text-zinc-900 uppercase">Xóa bộ đôi này?</h3>
+                <p className="text-xs text-zinc-500">
+                  Bạn có chắc chắn muốn xóa bộ đôi <strong className="text-zinc-800">{doubleToDelete.player1?.name} & {doubleToDelete.player2?.name}</strong>?
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-[11px] text-amber-800 leading-relaxed font-medium">
+                <strong>⚠️ CẢNH BÁO QUAN TRỌNG:</strong> Hành động này sẽ <strong>XÓA & RESET TOÀN BỘ</strong> lịch thi đấu, kết quả set đấu, và điểm số của phân khúc <strong>{doubleToDelete.category?.name}</strong> để bảo toàn tính nhất quán của dữ liệu giải đấu.
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={() => setDoubleToDelete(null)}
+                disabled={deleteDoubleMutation.isPending}
+                className="px-4 py-2 border border-zinc-200 rounded-lg hover:bg-zinc-100 text-zinc-700 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    await deleteDoubleMutation.mutateAsync(doubleToDelete.id);
+                    toast.success("Đã xóa bộ đôi và tự động reset lịch thi đấu liên quan.");
+                  } catch (err: any) {
+                    toast.error(err.message || "Lỗi khi xóa bộ đôi");
+                  } finally {
+                    setDoubleToDelete(null);
+                  }
+                }}
+                disabled={deleteDoubleMutation.isPending}
+                className="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-2 cursor-pointer"
+              >
+                {deleteDoubleMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Trash2 className="w-4 h-4" />
+                )}
+                Xác nhận xóa & Reset
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

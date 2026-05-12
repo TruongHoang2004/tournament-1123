@@ -220,14 +220,6 @@ export function GroupAssignment({ selectedCategoryId }: GroupAssignmentProps) {
             Tạo lịch thi đấu
             </button>
         </div>
-        <button
-          onClick={handleEndGroupStage}
-          disabled={isLoadingStandings}
-          className="w-full bg-zinc-900 text-white font-bold py-3 rounded-lg hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-        >
-          {isLoadingStandings ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-          Kết thúc Vòng Bảng (Tạo Bán kết)
-        </button>
       </div>
       
       {categoryDoubles.length !== 6 && (

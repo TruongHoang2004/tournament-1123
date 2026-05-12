@@ -89,10 +89,61 @@ export async function checkAndResolveNextMatch(finishedMatchId: string) {
     // When a match finishes (e.g. Semi-final), check if it flows into another match (e.g. Final)
     const match = await prisma.match.findUnique({
         where: { id: finishedMatchId },
-        include: { timelineMatch: true, doubleA: true, doubleB: true }
+        include: { 
+            timelineMatch: {
+                include: {
+                    round: true
+                }
+            }, 
+            doubleA: true, 
+            doubleB: true 
+        }
     });
 
     if (!match || !match.winnerTeamId) return;
+
+    // TỰ ĐỘNG CHỐT VÒNG BẢNG & TẠO BÁN KẾT: Nếu trận đấu vừa hoàn thành thuộc vòng bảng (GROUP)
+    if (match.timelineMatch.round.name === "GROUP") {
+        const categoryId = match.timelineMatch.categoryId;
+        const groupRound = await prisma.round.findFirst({ where: { name: "GROUP" } });
+        
+        if (groupRound) {
+            const allGroupTimelineMatches = await prisma.timelineMatch.findMany({
+                where: {
+                    categoryId,
+                    roundId: groupRound.id
+                },
+                select: { id: true }
+            });
+            const groupTimelineMatchIds = allGroupTimelineMatches.map(tm => tm.id);
+
+            // Kiểm tra số trận chưa đấu (chưa có người thắng)
+            const unfinishedGroupMatches = await prisma.match.findMany({
+                where: {
+                    timelineMatchId: { in: groupTimelineMatchIds },
+                    winnerTeamId: null
+                }
+            });
+
+            // Tổng số trận đã được tạo trong hệ thống
+            const groupMatches = await prisma.match.findMany({
+                where: {
+                    timelineMatchId: { in: groupTimelineMatchIds }
+                }
+            });
+
+            // Nếu số trận đấu đã được tạo đầy đủ và tất cả đã có kết quả (không còn trận nào chưa đấu)
+            if (groupMatches.length === groupTimelineMatchIds.length && unfinishedGroupMatches.length === 0) {
+                console.log(`[Auto-Trigger] Tất cả các trận đấu vòng bảng của category ${categoryId} đã kết thúc. Tự động khởi tạo vòng Bán Kết...`);
+                try {
+                    await endGroupStage(categoryId);
+                    console.log(`[Auto-Trigger] Tự động tạo vòng Bán Kết thành công cho category ${categoryId}`);
+                } catch (err: any) {
+                    console.error(`[Auto-Trigger] Lỗi khi tự động tạo vòng Bán Kết cho category ${categoryId}:`, err.message || err);
+                }
+            }
+        }
+    }
 
     const winnerDoubleId = match.winnerTeamId === match.doubleA.teamId ? match.doubleAId : match.doubleBId;
 
